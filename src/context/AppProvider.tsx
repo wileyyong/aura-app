@@ -5,7 +5,6 @@ import React, {
   useCallback,
   useMemo,
   useState,
-  useEffect,
 } from 'react';
 import { Web3Provider } from '@ethersproject/providers';
 
@@ -72,10 +71,6 @@ export const AppProvider: FC = ({ children }) => {
   }, []);
 
   const signer = provider?.getSigner();
-
-  useEffect(() => {
-    connect();
-  }, [connect]);
 
   const value = useMemo(
     () => ({

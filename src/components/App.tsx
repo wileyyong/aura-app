@@ -8,6 +8,7 @@ import { AppProvider } from '../context/AppProvider';
 import { Header } from './shared/Header';
 import { DataProvider } from '../context/DataProvider';
 import { Stake } from './pages/Stake';
+import { ModalProvider } from 'react-modal-hook';
 
 const Container = styled.div`
   max-width: 800px;
@@ -37,8 +38,10 @@ export const Layout: FC = ({ children }) => (
   <ThemeProvider theme={theme}>
     <GlobalStyle />
     <Wrapper>
-      <Header />
-      <Container>{children}</Container>
+      <ModalProvider>
+        <Header />
+        <Container>{children}</Container>
+      </ModalProvider>
     </Wrapper>
   </ThemeProvider>
 );

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Address = styled.div`
+export const Address = styled.button`
   background: rgb(255, 255, 255);
   border-radius: 0.5rem;
   padding: 0.75rem;
