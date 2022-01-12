@@ -1,8 +1,35 @@
 import React, { FC } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { styled } from '@mui/material';
+import { PoolsTable } from './PoolsTable';
 
-const columns = [
-  { field: 'poolName', headerName: 'Pool Name', width: 200 },
+const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+  border: 'none',
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
+    outline: 'none',
+  },
+  [`& .MuiDataGrid-cell`]: {
+    borderBottom: 'none',
+  },
+  [`& .MuiDataGrid-row`]: {
+    borderRadius: 8,
+    backgroundColor: theme.palette.grey[100],
+    marginBottom: theme.spacing(1),
+  },
+  '& .MuiDataGrid-columnSeparator': {
+    visibility: 'hidden',
+  },
+  [`& .MuiDataGrid-columnHeaders`]: {
+    borderBottom: 'none',
+  },
+  [`& .MuiDataGrid-columnHeader`]: {
+    border: 'none',
+    outline: 'none',
+  },
+}));
+
+const columns: GridColDef[] = [
+  { field: 'poolName', headerName: 'Pool Name', width: 300 },
   {
     field: 'vApr',
     headerName: 'vAPR',
@@ -27,5 +54,19 @@ const rows = [
 ];
 
 export const Stake: FC = () => {
-  return <DataGrid rows={rows} columns={columns} hideFooter autoHeight />;
+  const handleRowClick = () => {};
+
+  return (
+    <>
+      <StyledDataGrid
+        rows={rows}
+        columns={columns}
+        hideFooter
+        autoHeight
+        onRowClick={handleRowClick}
+      />
+      <br />
+      <PoolsTable />
+    </>
+  );
 };

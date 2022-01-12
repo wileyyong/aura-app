@@ -8,7 +8,6 @@ import { Button, Grid, Typography, Link, styled, Stack } from '@mui/material';
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.success.main,
-  fontSize: '26px', // just testing
 }));
 
 export const Header: FC = () => {
@@ -26,10 +25,11 @@ export const Header: FC = () => {
       direction="row"
       justifyContent="space-between"
       alignItems="center"
+      sx={{ mb: 4, py: 2 }}
     >
       <Grid item>
         <Link component={RouterLink} to="/">
-          <HeaderTitle>Aura</HeaderTitle>
+          <HeaderTitle variant="h5">Aura</HeaderTitle>
         </Link>
       </Grid>
       <Grid item>
