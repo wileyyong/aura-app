@@ -1,34 +1,31 @@
 import React, { FC } from 'react';
-import { Container } from './styles';
-
-import { makeDummyData } from './makeDummyData';
-import { Table } from '../../shared/Table';
+import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
+  { field: 'poolName', headerName: 'Pool Name', width: 200 },
   {
-    Header: 'Pools',
-    columns: [
-      {
-        Header: 'Pool Name',
-        accessor: 'poolName',
-      },
-      {
-        Header: 'vAPR',
-        accessor: 'vApr',
-      },
-      {
-        Header: 'TVL',
-        accessor: 'tvl',
-      },
-    ],
+    field: 'vApr',
+    headerName: 'vAPR',
+    width: 130,
+    valueFormatter: (params: any) => {
+      const valueFormatted = Number(params.value * 100).toLocaleString();
+      return `${valueFormatted}%`;
+    },
+  },
+  {
+    field: 'tvl',
+    headerName: 'TVL',
+    type: 'number',
+    width: 90,
   },
 ];
 
+const rows = [
+  { id: 1, poolName: 'CRV', vApr: '120', tvl: 35 },
+  { id: 2, poolName: 'CVX', vApr: '120', tvl: 42 },
+  { id: 3, poolName: 'BAL', vApr: '120', tvl: 45 },
+];
+
 export const Stake: FC = () => {
-  const data = React.useMemo(() => makeDummyData(10), []);
-  return (
-    <Container>
-      <Table columns={columns} data={data} />
-    </Container>
-  );
+  return <DataGrid rows={rows} columns={columns} hideFooter autoHeight />;
 };

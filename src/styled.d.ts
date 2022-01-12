@@ -1,8 +1,12 @@
-import "styled-components";
-import { Color } from "./theme";
+import "@mui/material/styles"
 
-declare module "styled-components" {
-  export interface DefaultTheme {
-    color: typeof Color;
+declare module '@mui/material/styles' {
+  interface CustomTheme {
+    myField?: {
+      myNestedField?: string;
+    };
   }
+
+  interface Theme extends CustomTheme {}
+  interface ThemeOptions extends CustomTheme {}
 }
