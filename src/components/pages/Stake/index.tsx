@@ -4,6 +4,7 @@ import { styled } from '@mui/material';
 import { PoolsTable } from './PoolsTable';
 
 import useStakedCVXAPR from '../../../hooks/useStakedCVXAPR';
+import useLockedCVXAPR from '../../../hooks/useLockedCVXAPR';
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: 'none',
@@ -49,27 +50,22 @@ const columns: GridColDef[] = [
   },
 ];
 
-const rows = [
-  { id: 1, poolName: 'CRV', vApr: '120', tvl: 35 },
-  { id: 2, poolName: 'CVX', vApr: '120', tvl: 42 },
-  { id: 3, poolName: 'BAL', vApr: '120', tvl: 45 },
-];
-
 export const Stake: FC = () => {
   const { data: stakedCVXAPR } = useStakedCVXAPR();
+  const { data: lockedCVXAPR } = useLockedCVXAPR();
 
   const handleRowClick = () => {};
 
-  const rowsWithApr = rows.map(row => ({
-    ...row,
-    vApr: row.poolName === 'CVX' && stakedCVXAPR ? stakedCVXAPR : row.vApr,
-  }));
+  const rows = [
+    { id: 1, poolName: 'CVX', vApr: stakedCVXAPR, tvl: 35 },
+    { id: 2, poolName: 'Locked CVX', vApr: lockedCVXAPR, tvl: 42 },
+    { id: 3, poolName: 'BAL', vApr: '120', tvl: 45 },
+  ];
 
   return (
     <>
-      <p>Staked APR: {stakedCVXAPR}</p>
       <StyledDataGrid
-        rows={rowsWithApr}
+        rows={rows}
         columns={columns}
         hideFooter
         autoHeight
