@@ -1,18 +1,7 @@
-import React, { FC, useRef, useState } from 'react';
-import {
-  Accordion,
-  Grid,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-  styled,
-  Button,
-} from '@mui/material';
+import { FC, useRef, useState } from 'react';
+import { Grid, Button } from '@mui/material';
 import usePoolInfo from '../../../hooks/usePoolInfo';
-
-const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[100],
-}));
+import PoolsRow from './PoolsRow';
 
 enum Header {
   poolName = 'poolName',
@@ -45,7 +34,7 @@ export const PoolsTable: FC = () => {
     setExpanded(newExpanded ? panel : false);
   };
 
-  const handleHeaderClick = (key: Header) => {
+  const handleHeaderClick = (key: Header) => () => {
     const newSorted = new Array(data.length)
       .concat(data)
       .sort((a, b) => (a[key] < b[key] ? -1 : 1));
@@ -57,38 +46,21 @@ export const PoolsTable: FC = () => {
     <Grid container>
       <Grid container justifyContent={'space-between'}>
         {headers.map(header => (
-          <Button key={header.id} onClick={() => handleHeaderClick(header.id)}>
+          <Button key={header.id} onClick={handleHeaderClick(header.id)}>
             {header.title}
           </Button>
         ))}
       </Grid>
-      {pools &&
-        pools.map(row => (
-          <Grid container direction="row" key={row.poolId}>
-            <StyledAccordion
+      {pools
+        ? pools.map(row => (
+            <PoolsRow
+              {...row}
+              key={row.poolId}
               expanded={expanded === row.poolId}
               onChange={handleChange(row.poolId)}
-              sx={{ my: 1 }}
-            >
-              <AccordionSummary>
-                <Grid container justifyContent={'space-between'}>
-                  <Typography>{row.symbol}</Typography>
-                  <Typography>N/A%</Typography>
-                  <Typography>N/A</Typography>
-                </Grid>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                  eget.
-                </Typography>
-              </AccordionDetails>
-            </StyledAccordion>
-          </Grid>
-        ))}
+            />
+          ))
+        : 'Loading...'}
     </Grid>
   );
 };
