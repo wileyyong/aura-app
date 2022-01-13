@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import { CrvDepositor__factory } from '../typechain/factories/CrvDepositor__factory';
-import { useAddress, useSigner } from './AppProvider';
+import { useAddress, useProvider, useSigner } from './AppProvider';
 
 interface State {
   initialised: boolean;
@@ -24,19 +24,20 @@ const stateCtx = createContext<State>(null as never);
 const dispatchCtx = createContext<Dispatch>(null as never);
 
 export const DataProvider: FC = ({ children }) => {
-  const signer = useSigner();
+  const provider = useProvider();
   const address = useAddress();
 
   const [state, setState] = useState<State>(initialState);
 
   useEffect(() => {
     (async () => {
-      if (!signer || !address || state.initialised) return;
+      if (!provider || state.initialised) return;
       try {
         const contract = CrvDepositor__factory.connect(
           '0x8014595F2AB54cD7c604B00E9fb932176fDc86Ae',
-          signer,
+          provider,
         );
+
         const crv = await contract.crv();
         // ...
         const state = {
@@ -49,7 +50,7 @@ export const DataProvider: FC = ({ children }) => {
         console.log(error);
       }
     })();
-  }, [address, signer, state]);
+  }, [address, provider, state]);
 
   return (
     <stateCtx.Provider value={useMemo(() => state, [state])}>

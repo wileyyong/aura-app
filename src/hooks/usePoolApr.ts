@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { Web3Provider } from '@ethersproject/providers';
 
-import useChainId from './useChainId';
+import { useChainId, useProvider } from '../context/AppProvider';
 import usePrice from './usePrice';
 import useCVXInfo from './useCVXInfo';
 import { Pool } from './usePoolInfo';
@@ -14,7 +14,6 @@ import getPrice from '../fetchers/price';
 
 import { ADDRESS } from '../constants';
 import { BigNumber } from 'ethers';
-import useReadProvider from './useReadProvider';
 
 async function fetchPoolApr(
   _: string,
@@ -25,14 +24,13 @@ async function fetchPoolApr(
   chainId: number,
   provider: Web3Provider,
 ) {
-  const rewardRate = await getRewardRate(pool.crvRewards);
-  const curveLpValue = await getCurveLpValue(pool.swap);
-  const totalSupply = await getTotalSupply(pool.crvRewards);
-  const underlyingCoins = await getUnderlyingCoins(
-    chainId,
-    pool.swap,
-    provider,
-  );
+  const [rewardRate, curveLpValue, totalSupply, underlyingCoins] =
+    await Promise.all([
+      getRewardRate(pool.crvRewards),
+      getCurveLpValue(pool.swap),
+      getTotalSupply(pool.crvRewards),
+      getUnderlyingCoins(chainId, pool.swap, provider),
+    ]);
   const underlyingPrice = await getPrice(underlyingCoins);
 
   const rewardRateN = Number(rewardRate.toString());
@@ -57,7 +55,7 @@ async function fetchPoolApr(
 
 export default function usePoolApr(pool: Pool) {
   const chainId = useChainId();
-  const provider = useReadProvider();
+  const provider = useProvider();
   const { data: cvxInfo } = useCVXInfo();
 
   const cvxAddress = chainId && ADDRESS[chainId].cvx;

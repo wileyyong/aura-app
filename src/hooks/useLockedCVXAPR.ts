@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
 import usePrice from './usePrice';
-import useChainId from './useChainId';
+import { useChainId } from '../context/AppProvider';
 import { ADDRESS } from '../constants';
 import getRewardRateOf from '../fetchers/rewardRateOf';
 import getBoostedSupply from '../fetchers/boostedSupply';

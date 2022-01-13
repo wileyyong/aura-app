@@ -4,7 +4,7 @@ import usePrice from './usePrice';
 import { ADDRESS } from '../constants';
 import getTotalSupply from '../fetchers/totalSupply';
 import getRewardRate from '../fetchers/rewardRate';
-import useChainId from './useChainId';
+import { useChainId } from '../context/AppProvider';
 
 const stakedAddress = '0xCF50b810E57Ac33B91dCF525C6ddd9881B139332';
 

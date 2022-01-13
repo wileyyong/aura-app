@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import useMulticall, { Call } from './useMulticall';
 import { ADDRESS } from '../constants';
 
@@ -8,7 +6,7 @@ import {
   Erc20__factory,
   Registry__factory,
 } from '../typechain';
-import useChainId from './useChainId';
+import { useChainId } from '../context/AppProvider';
 import useSWR from 'swr';
 
 const boosterItf = Booster__factory.createInterface();

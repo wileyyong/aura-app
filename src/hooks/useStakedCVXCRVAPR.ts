@@ -8,7 +8,7 @@ import getTotalSupply from '../fetchers/totalSupply';
 import curveLpValue from '../fetchers/curveLpValue';
 import getCVXMintAmount from '../fetchers/cvxMintAmount';
 import { ADDRESS } from '../constants';
-import useChainId from './useChainId';
+import { useChainId } from '../context/AppProvider';
 
 const stakeContract = '0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e';
 const threePoolStakeContract = '0x7091dbb7fcbA54569eF1387Ac89Eb2a5C9F6d2EA';
@@ -20,11 +20,12 @@ async function fetchStakedCVXCRVAPR(
   crvPrice: number,
   cvxInfo: any,
 ) {
-  const rate = await getRewardRate(stakeContract);
-  const threeRate = await getRewardRate(threePoolStakeContract);
-  const supply = await getTotalSupply(stakeContract);
-
-  const virtualPrice = await curveLpValue(swap);
+  const [rate, threeRate, supply, virtualPrice] = await Promise.all([
+    getRewardRate(stakeContract),
+    getRewardRate(threePoolStakeContract),
+    getTotalSupply(stakeContract),
+    curveLpValue(swap),
+  ]);
 
   const supplyN = Number(supply.toString());
   const rateN = Number(rate.toString());

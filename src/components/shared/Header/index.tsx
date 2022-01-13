@@ -1,6 +1,10 @@
 import React, { FC, useState } from 'react';
 
-import { useAddress, useConnect } from '../../../context/AppProvider';
+import {
+  useAddress,
+  useConnect,
+  useChainId,
+} from '../../../context/AppProvider';
 import { mediumAddress } from '../../../utils';
 import { Link as RouterLink } from 'react-router-dom';
 import { AccountModal } from '../Modals/AccountModal';
@@ -13,6 +17,7 @@ const HeaderTitle = styled(Typography)(({ theme }) => ({
 export const Header: FC = () => {
   const connect = useConnect();
   const address = useAddress();
+  const chainId = useChainId();
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -50,11 +55,15 @@ export const Header: FC = () => {
           <Grid item>
             {address ? (
               <>
-                <Button onClick={handleOpen}>{mediumAddress(address)}</Button>
+                <Button variant="outlined" onClick={handleOpen}>
+                  {mediumAddress(address)} [{chainId}]
+                </Button>
                 <AccountModal open={open} onClose={handleClose} />
               </>
             ) : (
-              <Button onClick={connect}>Connect Wallet</Button>
+              <Button variant="contained" onClick={connect}>
+                Connect Wallet
+              </Button>
             )}
           </Grid>
         </Grid>

@@ -6,7 +6,6 @@ import { PoolsTable } from './PoolsTable';
 import useStakedCVXAPR from '../../../hooks/useStakedCVXAPR';
 import useLockedCVXAPR from '../../../hooks/useLockedCVXAPR';
 import useStakedCVXCRVAPR from '../../../hooks/useStakedCVXCRVAPR';
-import usePoolInfo from '../../../hooks/usePoolInfo';
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: 'none',

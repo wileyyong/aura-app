@@ -1,8 +1,7 @@
 import { useCallback } from 'react';
 import { Interface } from 'ethers/lib/utils';
 
-import useChainId from './useChainId';
-import useReadProvider from './useReadProvider';
+import { useChainId, useProvider } from '../context/AppProvider';
 import { ADDRESS, MAX_GAS_LIMIT } from '../constants';
 
 import { Multicall__factory } from '../typechain/factories/Multicall__factory';
@@ -14,7 +13,7 @@ export interface Call {
 }
 
 export default function useMulticall(itf: Interface) {
-  const provider = useReadProvider();
+  const provider = useProvider();
   const chainId = useChainId();
 
   return useCallback(
