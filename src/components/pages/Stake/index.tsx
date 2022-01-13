@@ -5,6 +5,7 @@ import { PoolsTable } from './PoolsTable';
 
 import useStakedCVXAPR from '../../../hooks/useStakedCVXAPR';
 import useLockedCVXAPR from '../../../hooks/useLockedCVXAPR';
+import useStakedCVXCRVAPR from '../../../hooks/useStakedCVXCRVAPR';
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: 'none',
@@ -53,13 +54,14 @@ const columns: GridColDef[] = [
 export const Stake: FC = () => {
   const { data: stakedCVXAPR } = useStakedCVXAPR();
   const { data: lockedCVXAPR } = useLockedCVXAPR();
+  const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
 
   const handleRowClick = () => {};
 
   const rows = [
     { id: 1, poolName: 'CVX', vApr: stakedCVXAPR, tvl: 35 },
     { id: 2, poolName: 'Locked CVX', vApr: lockedCVXAPR, tvl: 42 },
-    { id: 3, poolName: 'BAL', vApr: '120', tvl: 45 },
+    { id: 3, poolName: 'cvxCRV', vApr: stakedCVXCRVAPR, tvl: 45 },
   ];
 
   return (

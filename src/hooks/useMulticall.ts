@@ -7,7 +7,7 @@ import { ADDRESS, MAX_GAS_LIMIT } from '../constants';
 
 import { Multicall__factory } from '../typechain/factories/Multicall__factory';
 
-interface Call {
+export interface Call {
   address: string;
   name: string;
   params: (string | number)[];
