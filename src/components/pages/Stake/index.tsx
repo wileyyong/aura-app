@@ -3,6 +3,8 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { styled } from '@mui/material';
 import { PoolsTable } from './PoolsTable';
 
+import useStakedCVXAPR from '../../../hooks/useStakedCVXAPR';
+
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   border: 'none',
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus': {
@@ -54,12 +56,20 @@ const rows = [
 ];
 
 export const Stake: FC = () => {
+  const { data: stakedCVXAPR } = useStakedCVXAPR();
+
   const handleRowClick = () => {};
+
+  const rowsWithApr = rows.map(row => ({
+    ...row,
+    vApr: row.poolName === 'CVX' && stakedCVXAPR ? stakedCVXAPR : row.vApr,
+  }));
 
   return (
     <>
+      <p>Staked APR: {stakedCVXAPR}</p>
       <StyledDataGrid
-        rows={rows}
+        rows={rowsWithApr}
         columns={columns}
         hideFooter
         autoHeight
