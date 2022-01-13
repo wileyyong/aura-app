@@ -57,10 +57,6 @@ export const Stake: FC = () => {
   const { data: lockedCVXAPR } = useLockedCVXAPR();
   const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
 
-  const pools = usePoolInfo(['14', '19', '30']);
-
-  console.log(pools);
-
   const handleRowClick = () => {};
 
   const rows = [

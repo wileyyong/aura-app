@@ -8,6 +8,7 @@ import {
   styled,
   Button,
 } from '@mui/material';
+import usePoolInfo from '../../../hooks/usePoolInfo';
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   backgroundColor: theme.palette.grey[100],
@@ -34,6 +35,8 @@ const data = [
 // Might be overcooked but probably gives us more flexibility in style
 
 export const PoolsTable: FC = () => {
+  const { data: pools } = usePoolInfo(['14', '19', '30']);
+
   const [sorted, setSorted] = useState(data);
   const [expanded, setExpanded] = useState<number>();
   const isAsc = useRef(false);
@@ -59,34 +62,33 @@ export const PoolsTable: FC = () => {
           </Button>
         ))}
       </Grid>
-      {sorted.map(row => (
-        <Grid container direction="row" key={`${row.poolName}-${row.id}`}>
-          <StyledAccordion
-            expanded={expanded === row.id}
-            onChange={handleChange(row.id)}
-            sx={{ my: 1 }}
-          >
-            <AccordionSummary>
-              <Grid container justifyContent={'space-between'}>
-                <Typography>{row.poolName}</Typography>
-                <Typography>{row.vApr}%</Typography>
-                <Typography>{row.tvl}</Typography>
-              </Grid>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>
-                {row.poolName === 'CRV' && <span>hello</span>}
-                {row.poolName === 'CVX' && <span>test</span>}
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
-                eget.
-              </Typography>
-            </AccordionDetails>
-          </StyledAccordion>
-        </Grid>
-      ))}
+      {pools &&
+        pools.map(row => (
+          <Grid container direction="row" key={row.poolId}>
+            <StyledAccordion
+              expanded={expanded === row.poolId}
+              onChange={handleChange(row.poolId)}
+              sx={{ my: 1 }}
+            >
+              <AccordionSummary>
+                <Grid container justifyContent={'space-between'}>
+                  <Typography>{row.symbol}</Typography>
+                  <Typography>N/A%</Typography>
+                  <Typography>N/A</Typography>
+                </Grid>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                  eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Suspendisse malesuada lacus ex, sit amet blandit leo lobortis
+                  eget.
+                </Typography>
+              </AccordionDetails>
+            </StyledAccordion>
+          </Grid>
+        ))}
     </Grid>
   );
 };
