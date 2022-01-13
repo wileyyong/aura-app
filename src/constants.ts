@@ -7,6 +7,8 @@ interface Contracts {
   cvx: string;
   crv: string;
   cvxCRV: string;
+  booster: string;
+  registry: string;
 }
 
 export const ADDRESS: { [key: number]: Contracts } = {
@@ -15,6 +17,8 @@ export const ADDRESS: { [key: number]: Contracts } = {
     cvx: '0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B',
     crv: '0xD533a949740bb3306d119CC777fa900bA034cd52',
     cvxCRV: '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7',
+    booster: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
+    registry: '0x90E00ACe148ca3b23Ac1bC8C240C2a7Dd9c2d7f5',
   },
 };
 
