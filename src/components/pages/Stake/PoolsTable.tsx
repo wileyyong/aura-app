@@ -54,7 +54,7 @@ export const PoolsTable: FC = () => {
       {pools
         ? pools.map(row => (
             <PoolsRow
-              {...row}
+              pool={row}
               key={row.poolId}
               expanded={expanded === row.poolId}
               onChange={handleChange(row.poolId)}

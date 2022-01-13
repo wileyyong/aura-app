@@ -52,7 +52,7 @@ async function fetchPoolApr(
   const cvxApr =
     cvxPerYear * (Number(cvxPrice.toString()) / normalisedUnderlyingPrice);
 
-  return crvApr + cvxApr;
+  return (crvApr + cvxApr) / 1e18;
 }
 
 export default function usePoolApr(pool: Pool) {

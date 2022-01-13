@@ -10,7 +10,6 @@ import {
 } from '../typechain';
 import useChainId from './useChainId';
 import useSWR from 'swr';
-import { Result } from 'ethers/lib/utils';
 
 const boosterItf = Booster__factory.createInterface();
 const registryItf = Registry__factory.createInterface();
