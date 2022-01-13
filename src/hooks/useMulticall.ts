@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Interface } from 'ethers/lib/utils';
 
 import useChainId from './useChainId';
-import { useSigner } from '../context/AppProvider';
+import useReadProvider from './useReadProvider';
 import { ADDRESS, MAX_GAS_LIMIT } from '../constants';
 
 import { Multicall__factory } from '../typechain/factories/Multicall__factory';
@@ -14,16 +14,16 @@ export interface Call {
 }
 
 export default function useMulticall(itf: Interface) {
-  const signer = useSigner();
+  const provider = useReadProvider();
   const chainId = useChainId();
 
   return useCallback(
     async (calls: Call[]) => {
-      if (!signer || !chainId) return;
+      if (!provider || !chainId) return;
 
       const multicallAddress = ADDRESS[chainId].multicall;
 
-      const multiCall = Multicall__factory.connect(multicallAddress, signer);
+      const multiCall = Multicall__factory.connect(multicallAddress, provider);
 
       const calldata: { target: string; callData: any }[] = calls.map(call => ({
         target: call.address.toLowerCase(),
@@ -40,6 +40,6 @@ export default function useMulticall(itf: Interface) {
 
       return resp;
     },
-    [itf, signer, chainId],
+    [itf, provider, chainId],
   );
 }
