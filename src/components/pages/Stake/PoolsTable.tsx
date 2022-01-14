@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Grid, styled, Typography } from '@mui/material';
 import usePoolInfo from '../../../hooks/usePoolInfo';
-import PoolsRow from './PoolsRow';
+import { PoolsRow } from './PoolsRow';
 import Skeleton from 'react-loading-skeleton';
 
 const HeaderTitle = styled(Typography)`

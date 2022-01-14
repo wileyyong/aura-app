@@ -18,8 +18,8 @@ export const Header: FC = () => {
   const connect = useConnect();
   const address = useAddress();
   const chainId = useChainId();
-  const [open, setOpen] = useState(false);
 
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
