@@ -1,23 +1,36 @@
 import React, { FC } from 'react';
-import { Modal, Box } from '@mui/material';
+import { Modal, Button, Box, styled, Typography, Grid } from '@mui/material';
 
 import {
   useAddress,
   useConnect,
   useDisconnect,
 } from '../../../context/AppProvider';
+import { mediumAddress } from '../../../utils';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+const HeaderTitle = styled(Typography)`
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[400]};
+`;
+
+const Address = styled('span')`
+  border: 1px solid ${({ theme }) => theme.palette.grey[300]};
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+`;
+
+const StyledBox = styled(Box)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background-color: ${({ theme }) => theme.palette.grey[100]};
+  border-radius: 1rem;
+  padding: 1rem;
+  text-align: center;
+`;
 
 export const AccountModal: FC<{ open: boolean; onClose: () => void }> = ({
   open,
@@ -29,17 +42,24 @@ export const AccountModal: FC<{ open: boolean; onClose: () => void }> = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <Box sx={style}>
+      <StyledBox>
+        <HeaderTitle sx={{ mb: 1, pb: 1 }}>Account</HeaderTitle>
         {!!address ? (
-          <>
-            <h3>Connected with {address}</h3>
+          <Grid container direction="column" sx={{ py: 2 }}>
+            <Grid item>
+              <Typography variant="subtitle1">
+                Connected with <Address>{mediumAddress(address)}</Address>
+              </Typography>
+            </Grid>
             <br />
-            <button onClick={disconnect}>Disconnect</button>
-          </>
+            <Button variant="contained" onClick={disconnect}>
+              Disconnect
+            </Button>
+          </Grid>
         ) : (
-          <button onClick={connect}>Connect</button>
+          <Button onClick={connect}>Connect</Button>
         )}
-      </Box>
+      </StyledBox>
     </Modal>
   );
 };
