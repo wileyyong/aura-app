@@ -68,6 +68,10 @@ export const PoolsRow = ({ expanded, onChange, pool }: PoolsRowProps) => {
 
   const { data: apr } = usePoolApr(pool);
 
+  const share =
+    Number(pool.tokenTotalSupply.toString()) /
+    Number(pool.lptokenTotalSupply.toString());
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -106,7 +110,9 @@ export const PoolsRow = ({ expanded, onChange, pool }: PoolsRowProps) => {
               </Grid>
             </Grid>
             <Grid item xs={3}>
-              <Typography textAlign="right">N/A</Typography>
+              <Typography textAlign="right">
+                N/A (share: {(share * 100).toFixed(2)}%)
+              </Typography>
             </Grid>
           </Grid>
         </AccordionSummary>

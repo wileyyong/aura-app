@@ -1,13 +1,14 @@
-import useMulticall, { Call } from './useMulticall';
-import { ADDRESS } from '../constants';
+import useSWR from 'swr';
+import { BigNumber } from 'ethers';
 
 import {
   Booster__factory,
   Erc20__factory,
   Registry__factory,
 } from '../typechain';
+import { ADDRESS } from '../constants';
 import { useChainId } from '../context/AppProvider';
-import useSWR from 'swr';
+import useMulticall, { Call } from './useMulticall';
 
 const boosterItf = Booster__factory.createInterface();
 const registryItf = Registry__factory.createInterface();
@@ -23,13 +24,15 @@ export interface Pool {
   crvRewards: string;
   shutdown: boolean;
   stash: string;
+  lptokenTotalSupply: BigNumber;
+  tokenTotalSupply: BigNumber;
 }
 
 async function fetchPools(
   _: string,
   chainId: number,
   poolIds: string[],
-  boosterMulticall: (call: Call[]) => Promise<
+  boosterMulticall: (call: Call[] | Array<Call[]>) => Promise<
     | undefined
     | {
         lptoken: string;
@@ -40,8 +43,12 @@ async function fetchPools(
         shutdown: boolean;
       }[]
   >,
-  erc20Multicall: (call: Call[]) => Promise<undefined | [string][]>,
-  registryMulticall: (call: Call[]) => Promise<undefined | [string][]>,
+  erc20Multicall: (
+    call: Call[] | Array<Call[]>,
+  ) => Promise<undefined | [string][][] | [BigNumber][][]>,
+  registryMulticall: (
+    call: Call[] | Array<Call[]>,
+  ) => Promise<undefined | [string][]>,
 ) {
   const boosterAddress = ADDRESS[chainId].booster;
   const registryAddress = ADDRESS[chainId].registry;
@@ -56,11 +63,23 @@ async function fetchPools(
 
   if (!boosterResp) return;
 
-  const erc20Calls = boosterResp.map(pool => ({
-    address: pool.lptoken,
-    name: 'symbol',
-    params: [],
-  }));
+  const erc20Calls = boosterResp.map(pool => [
+    {
+      address: pool.lptoken,
+      name: 'symbol',
+      params: [],
+    },
+    {
+      address: pool.lptoken,
+      name: 'totalSupply',
+      params: [],
+    },
+    {
+      address: pool.token,
+      name: 'totalSupply',
+      params: [],
+    },
+  ]);
 
   const symbolResp = await erc20Multicall(erc20Calls);
 
@@ -76,9 +95,9 @@ async function fetchPools(
 
   if (!registryResp) return;
 
-  const data = boosterResp.map((x, i) => ({
+  const data: Pool[] = boosterResp.map((x, i) => ({
     poolId: i,
-    symbol: symbolResp[i][0],
+    symbol: symbolResp[i]?.[0]?.[0] as string,
     lptoken: x.lptoken,
     token: x.token,
     gauge: x.gauge,
@@ -86,6 +105,8 @@ async function fetchPools(
     crvRewards: x.crvRewards,
     shutdown: x.shutdown,
     stash: x.stash,
+    lptokenTotalSupply: symbolResp[i]?.[1]?.[0] as BigNumber,
+    tokenTotalSupply: symbolResp[i]?.[2]?.[0] as BigNumber,
   }));
 
   return data;
