@@ -1,15 +1,15 @@
-import { ethers } from "ethers";
-import alchemyFetcher from "./alchemyFetcher";
+import { ethers } from 'ethers';
+import alchemyFetcher from './alchemyFetcher';
 
 export default async function rewardRate(contractAddress: string) {
-  const rewardRate = "7b0a47ee";
+  const rewardRate = '7b0a47ee';
 
   const params = [
     {
       to: contractAddress,
       data: `0x${rewardRate}`,
     },
-    "latest",
+    'latest',
   ];
 
   const data = await alchemyFetcher(params);

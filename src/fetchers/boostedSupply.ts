@@ -1,15 +1,15 @@
-import { ethers } from "ethers";
-import alchemyFetcher from "./alchemyFetcher";
+import { ethers } from 'ethers';
+import alchemyFetcher from './alchemyFetcher';
 
 export default async function boostedSupply(contract: string) {
-  const totalSupply = "75aadf61";
+  const totalSupply = '75aadf61';
 
   const params = [
     {
       to: contract,
       data: `0x${totalSupply}`,
     },
-    "latest",
+    'latest',
   ];
 
   const data = await alchemyFetcher(params);

@@ -6,7 +6,7 @@ import getTotalSupply from '../fetchers/totalSupply';
 import getRewardRate from '../fetchers/rewardRate';
 import { useChainId } from '../context/AppProvider';
 
-// NOTE: CVX rewards address. Total supply * CVX price is TVL 
+// NOTE: CVX rewards address. Total supply * CVX price is TVL
 const stakedAddress = '0xCF50b810E57Ac33B91dCF525C6ddd9881B139332';
 
 async function fetchCVXAPR(_: any, cvxPrice: number, crvPrice: number) {
