@@ -8,6 +8,7 @@ import { AppProvider } from '../context/AppProvider';
 import { Header } from './shared/Header';
 import { DataProvider } from '../context/DataProvider';
 import { Stake } from './pages/Stake';
+import { Lock } from './pages/Lock';
 import { Container } from '@mui/material';
 
 const Routes: FC = () => {
@@ -15,6 +16,7 @@ const Routes: FC = () => {
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/stake" component={Stake} />
+      <Route exact path="/lock" component={Lock} />
     </Switch>
   );
 };

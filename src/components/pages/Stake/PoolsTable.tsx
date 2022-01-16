@@ -20,30 +20,30 @@ export const PoolsTable: FC = () => {
   };
 
   return (
-    <Grid container>
-      <Grid container spacing={1} sx={{ px: 2, my: 1 }}>
-        <Grid item xs={3}>
-          <HeaderTitle>Pool Name</HeaderTitle>
+    <>
+      <Grid container>
+        <Grid container spacing={1} sx={{ px: 2, my: 1 }}>
+          <Grid item xs={3}>
+            <HeaderTitle>Pool Name</HeaderTitle>
+          </Grid>
+          <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
+            <HeaderTitle>vApr</HeaderTitle>
+          </Grid>
+          <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
+            <HeaderTitle>TVL</HeaderTitle>
+          </Grid>
         </Grid>
-        <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
-          <HeaderTitle>vApr</HeaderTitle>
-        </Grid>
-        <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
-          <HeaderTitle>TVL</HeaderTitle>
-        </Grid>
+        {pools &&
+          pools.map(row => (
+            <PoolsRow
+              pool={row}
+              key={row.poolId}
+              expanded={expanded === row.poolId}
+              onChange={handleChange(row.poolId)}
+            />
+          ))}
       </Grid>
-      {pools ? (
-        pools.map(row => (
-          <PoolsRow
-            pool={row}
-            key={row.poolId}
-            expanded={expanded === row.poolId}
-            onChange={handleChange(row.poolId)}
-          />
-        ))
-      ) : (
-        <Skeleton width={300} height={50} />
-      )}
-    </Grid>
+      {!pools && <Skeleton height={50} />}
+    </>
   );
 };
