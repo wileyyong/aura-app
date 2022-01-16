@@ -43,7 +43,7 @@ export const PoolsTable: FC = () => {
             />
           ))}
       </Grid>
-      {!pools && <Skeleton height={50} />}
+      {!pools && <Skeleton height={50} count={3} />}
     </>
   );
 };
