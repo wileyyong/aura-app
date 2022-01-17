@@ -1,37 +1,16 @@
-import useSWR from 'swr';
-
 import usePrice from './usePrice';
 import { useChainId } from '../context/AppProvider';
 import { ADDRESS } from '../constants';
-import getRewardRateOf from '../fetchers/rewardRateOf';
-import getBoostedSupply from '../fetchers/boostedSupply';
-
-const stakedAddress = '0xD18140b4B819b895A3dba5442F959fA44994AF50';
-
-async function fetchLockedCVXAPR(
-  _: string,
-  chainId: number,
-  cvxPrice: number,
-  crvPrice: number,
-) {
-  const cvxCrvAddress = ADDRESS[chainId].cvxCRV;
-
-  const rewardRate = await getRewardRateOf(stakedAddress, cvxCrvAddress);
-  const boostedSupply = await getBoostedSupply(stakedAddress);
-
-  const supply = boostedSupply.mul(cvxPrice);
-
-  const rewardRateN = Number(rewardRate.toString());
-  const supplyN = Number(supply.toString());
-
-  const rate = rewardRateN / supplyN;
-
-  const crvPerYear = rate * 86400 * 365;
-  return crvPerYear * crvPrice;
-}
+import { useContracts } from '../context/DataProvider';
+import { useEffect, useMemo, useState } from 'react';
+import { parseBN } from '../utils';
 
 export default function useLockedCVXAPR() {
   const chainId = useChainId();
+  const contracts = useContracts();
+  const [apr, setApr] = useState(0);
+
+  const cvxLocker = contracts.cvxLocker;
 
   const cvxAddress = chainId && ADDRESS[chainId].cvx;
   const crvAddress = chainId && ADDRESS[chainId].crv;
@@ -44,10 +23,30 @@ export default function useLockedCVXAPR() {
     typeof crvAddress === 'string' ? [crvAddress] : undefined,
   );
 
-  const shouldFetch = chainId && cvxPrice && crvPrice;
+  useEffect(() => {
+    (async () => {
+      if (!cvxLocker || !crvPrice || !cvxPrice) return 0;
 
-  return useSWR(
-    shouldFetch ? ['lockedCVXAPR', chainId, cvxPrice, crvPrice] : null,
-    fetchLockedCVXAPR,
-  );
+      const [boostedSupply, rewardData] = await Promise.all([
+        cvxLocker.boostedSupply(),
+        cvxLocker.rewardData(ADDRESS[chainId].cvxCRV),
+      ]);
+
+      const rewardRate = rewardData.rewardRate;
+      const supply = boostedSupply.mul(cvxPrice);
+
+      const rewardRateN = parseBN(rewardRate);
+      const supplyN = parseBN(supply);
+
+      const rate = rewardRateN / supplyN;
+
+      const crvPerYear = rate * 86400 * 365;
+
+      const apr = crvPerYear * parseBN(crvPrice);
+
+      setApr(apr);
+    })();
+  }, [chainId, crvPrice, cvxLocker, cvxPrice]);
+
+  return useMemo(() => apr, [apr]);
 }

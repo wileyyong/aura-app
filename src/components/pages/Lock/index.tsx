@@ -4,7 +4,7 @@ import { AccordionItem } from '../../shared/AccordionItem';
 import useLockedCVXAPR from '../../../hooks/useLockedCVXAPR';
 
 export const Lock: FC = () => {
-  const { data: lockedCVXAPR } = useLockedCVXAPR();
+  const lockedCVXAPR = useLockedCVXAPR();
 
   return (
     <Box>

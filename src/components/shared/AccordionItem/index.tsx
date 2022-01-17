@@ -10,7 +10,6 @@ import {
   Tabs,
   Tab,
 } from '@mui/material';
-import { Pool } from '../../../hooks/usePoolInfo';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
 import { PoolModal } from '../../shared/Modals/PoolModal';
