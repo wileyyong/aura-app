@@ -13,6 +13,8 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
 import { PoolModal } from '../../shared/Modals/PoolModal';
+import { DepositInput } from '../../shared/DepositInput';
+import { WithdrawInput } from '../../shared/WithdrawInput';
 
 interface AccordionItemProps {
   poolId: number;
@@ -57,7 +59,7 @@ const TabPanel = ({ children, value, index, ...other }: any) => (
     {...other}
   >
     {value === index && (
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ pt: 3 }}>
         <Typography>{children}</Typography>
       </Box>
     )}
@@ -134,10 +136,10 @@ export const AccordionItem = ({
             </Tabs>
           </Box>
           <TabPanel value={tabValue} index={0}>
-            Deposit...
+            <DepositInput label="Amount to deposit" buttonLabel="Stake" />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            Unstake...
+            <WithdrawInput label="Amount to withdraw" buttonLabel="Unstake" />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
             Info...
