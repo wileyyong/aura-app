@@ -6,10 +6,13 @@ import { Home } from './pages/Home';
 import { theme } from '../theme';
 import { AppProvider } from '../context/AppProvider';
 import { Header } from './shared/Header';
+import { Footer } from './shared/Footer';
 import { DataProvider } from '../context/DataProvider';
 import { Stake } from './pages/Stake';
 import { Lock } from './pages/Lock';
 import { Container } from '@mui/material';
+
+import './App.css';
 
 const Routes: FC = () => {
   return (
@@ -27,6 +30,7 @@ export const Layout: FC = ({ children }) => (
       <Header />
       {children}
     </Container>
+    <Footer />
   </ThemeProvider>
 );
 
