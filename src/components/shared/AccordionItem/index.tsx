@@ -37,8 +37,12 @@ const Info = styled(InfoIcon)`
   }
 `;
 
-const StyledAccordion = styled(Accordion)`
-  background: ${({ theme }) => theme.palette.grey[200]};
+const StyledAccordion = styled(Accordion)<{ highlighted: boolean }>`
+  background: ${({ theme, highlighted }: any) =>
+    highlighted ? theme.palette.grey[900] : theme.palette.grey[200]};
+
+  color: ${({ theme, highlighted }: any) =>
+    highlighted ? theme.palette.grey[100] : theme.palette.grey[900]};
 
   & .MuiCollapse-root {
     background: ${({ theme }) => theme.palette.background.default};
@@ -94,6 +98,7 @@ export const AccordionItem = ({
   return (
     <Grid container direction="row" key={poolId} sx={{ my: 0.5 }}>
       <StyledAccordion
+        highlighted={highlighted}
         expanded={expanded}
         onChange={onChange}
         disableGutters
