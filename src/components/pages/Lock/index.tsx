@@ -15,6 +15,7 @@ export const Lock: FC = () => {
           <Typography variant="h6">Lock AURA</Typography>
         </Box>
         <AccordionItem
+          highlighted
           poolId={0}
           symbol={'Locked AURA'}
           apr={lockedCVXAPR}
@@ -27,6 +28,7 @@ export const Lock: FC = () => {
           <Typography variant="h6">Stake your AURA to earn auraBAL</Typography>
         </Box>
         <AccordionItem
+          highlighted
           poolId={0}
           symbol={'AURA'}
           apr={stakedCVXAPR}

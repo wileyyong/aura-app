@@ -22,15 +22,24 @@ export const PoolsTable: FC = () => {
   return (
     <>
       <Grid container>
-        <Grid container spacing={1} sx={{ px: 2, my: 1 }}>
-          <Grid item xs={3}>
+        <Grid
+          container
+          spacing={1}
+          sx={{ px: 2, my: 1, width: 'calc(100% - 10px)' }}
+        >
+          <Grid item xs={4}>
             <HeaderTitle>Pool Name</HeaderTitle>
           </Grid>
-          <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
-            <HeaderTitle>vApr</HeaderTitle>
-          </Grid>
-          <Grid item xs={3} display={'flex'} justifyContent={'flex-end'}>
-            <HeaderTitle>TVL</HeaderTitle>
+          <Grid item container xs={8}>
+            <Grid item xs={4}>
+              <HeaderTitle>vApr</HeaderTitle>
+            </Grid>
+            <Grid item xs={4}>
+              <HeaderTitle>My Deposits</HeaderTitle>
+            </Grid>
+            <Grid item xs={4}>
+              <HeaderTitle>TVL</HeaderTitle>
+            </Grid>
           </Grid>
         </Grid>
         {pools &&

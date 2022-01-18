@@ -9,6 +9,7 @@ import {
   Box,
   Tabs,
   Tab,
+  Stack,
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
@@ -24,6 +25,7 @@ interface AccordionItemProps {
   apr?: number;
   tvl?: number;
   share?: number;
+  highlighted?: boolean;
 }
 
 const Info = styled(InfoIcon)`
@@ -73,6 +75,7 @@ export const AccordionItem = ({
   apr,
   expanded,
   onChange,
+  highlighted = false,
 }: AccordionItemProps) => {
   const [tabValue, setTabValue] = useState(0);
 
@@ -103,23 +106,31 @@ export const AccordionItem = ({
           }
         >
           <Grid container spacing={1} alignItems="center">
-            <Grid item xs={3}>
+            <Grid item xs={4}>
               <Typography>{symbol}</Typography>
             </Grid>
-            <Grid container item xs={3} justifyContent={'flex-end'}>
-              <Grid item>
-                <Typography textAlign="right">
-                  {apr && (apr * 100).toFixed(2)}%
+            <Grid item container xs={8}>
+              <Grid item xs={4}>
+                {highlighted && <Typography variant="body2">vARP</Typography>}
+                <Stack direction="row">
+                  <Typography>{apr && (apr * 100).toFixed(2)}%</Typography>
+                  <Info onClick={handleInfoClick} />
+                </Stack>
+              </Grid>
+              <Grid item xs={4}>
+                {highlighted && (
+                  <Typography variant="body2">My Stake</Typography>
+                )}
+                <Typography>
+                  Share: {share && (share * 100).toFixed(2)}%
                 </Typography>
               </Grid>
-              <Grid item>
-                <Info onClick={handleInfoClick} />
+              <Grid item xs={4}>
+                {highlighted && <Typography textAlign="left">TVL</Typography>}
+                <Typography variant="body2">
+                  Share: {share && (share * 100).toFixed(2)}%
+                </Typography>
               </Grid>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography textAlign="right">
-                Share: {share && (share * 100).toFixed(2)}%
-              </Typography>
             </Grid>
           </Grid>
         </AccordionSummary>

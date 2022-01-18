@@ -14,6 +14,7 @@ export const Stake: FC = () => {
           <Typography variant="h6">Convert BAL</Typography>
         </Box>
         <AccordionItem
+          highlighted
           poolId={0}
           symbol={'BAL'}
           apr={stakedCVXCRVAPR}
