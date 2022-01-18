@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Modal, Button, Box, styled, Typography, Grid } from '@mui/material';
+import { Modal, Button, styled, Typography, Grid } from '@mui/material';
 
 import {
   useAddress,
@@ -7,11 +7,12 @@ import {
   useDisconnect,
 } from '../../../context/AppProvider';
 import { mediumAddress } from '../../../utils';
+import { ModalBox } from '../index';
 
 const HeaderTitle = styled(Typography)`
   font-weight: 600;
   text-align: center;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[400]};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey[300]};
 `;
 
 const Address = styled('span')`
@@ -20,19 +21,7 @@ const Address = styled('span')`
   border-radius: 0.5rem;
 `;
 
-const StyledBox = styled(Box)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
-  background-color: ${({ theme }) => theme.palette.grey[100]};
-  border-radius: 1rem;
-  padding: 1rem;
-  text-align: center;
-`;
-
-export const AccountModal: FC<{ open: boolean; onClose: () => void }> = ({
+export const ModalAccount: FC<{ open: boolean; onClose: () => void }> = ({
   open,
   onClose,
 }) => {
@@ -42,7 +31,7 @@ export const AccountModal: FC<{ open: boolean; onClose: () => void }> = ({
 
   return (
     <Modal open={open} onClose={onClose}>
-      <StyledBox>
+      <ModalBox>
         <HeaderTitle sx={{ mb: 1, pb: 1 }}>Account</HeaderTitle>
         {!!address ? (
           <Grid container direction="column" sx={{ py: 2 }}>
@@ -59,7 +48,7 @@ export const AccountModal: FC<{ open: boolean; onClose: () => void }> = ({
         ) : (
           <Button onClick={connect}>Connect</Button>
         )}
-      </StyledBox>
+      </ModalBox>
     </Modal>
   );
 };

@@ -15,14 +15,14 @@ export const Footer = () => {
           <Grid container>
             <Grid item xs={3}>
               <Box mb={2}>
-                <Typography variant="h6">
+                <Typography variant="h4">
                   <b>
                     <u>AURA</u>
                   </b>
                 </Typography>
               </Box>
-              <Typography variant="caption">Supported by</Typography>
-              <Typography variant="h6">Balancer</Typography>
+              <Typography variant="h5">Supported by</Typography>
+              <Typography variant="h5">Balancer</Typography>
             </Grid>
             <Grid item xs={4}>
               <Box mb={2}>

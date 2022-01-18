@@ -13,9 +13,9 @@ import {
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
-import { PoolModal } from '../../shared/Modals/PoolModal';
-import { DepositInput } from '../../shared/DepositInput';
-import { WithdrawInput } from '../../shared/WithdrawInput';
+import { ModalPool } from '../ModalPool';
+import { DepositInput } from '../DepositInput';
+import { WithdrawInput } from '../WithdrawInput';
 
 interface AccordionItemProps {
   poolId: number;
@@ -74,7 +74,7 @@ const TabPanel = ({ children, value, index, ...other }: any) => (
   </div>
 );
 
-export const AccordionItem = ({
+export const AccordionInput = ({
   symbol,
   poolId,
   share,
@@ -164,7 +164,7 @@ export const AccordionItem = ({
           </TabPanel>
         </AccordionDetails>
       </StyledAccordion>
-      <PoolModal open={infoModalOpen} onClose={handleClose} />
+      <ModalPool open={infoModalOpen} onClose={handleClose} />
     </Grid>
   );
 };

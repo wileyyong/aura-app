@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Button, Box } from '@mui/material';
+import { Stack, Button } from '@mui/material';
 
 import { Input } from '../Input';
 

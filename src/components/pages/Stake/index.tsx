@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 import { PoolsTable } from './PoolsTable';
-import { AccordionItem } from '../../shared/AccordionItem';
+import { AccordionInput } from '../../shared/AccordionInput';
 import useStakedCVXCRVAPR from '../../../hooks/useStakedCVXCRVAPR';
 
 export const Stake: FC = () => {
@@ -13,7 +13,7 @@ export const Stake: FC = () => {
         <Box mb={2}>
           <Typography variant="h6">Convert BAL</Typography>
         </Box>
-        <AccordionItem
+        <AccordionInput
           highlighted
           poolId={0}
           symbol={'BAL'}

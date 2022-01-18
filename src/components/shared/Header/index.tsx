@@ -7,7 +7,7 @@ import {
 } from '../../../context/AppProvider';
 import { mediumAddress } from '../../../utils';
 import { Link as RouterLink } from 'react-router-dom';
-import { AccountModal } from '../Modals/AccountModal';
+import { ModalAccount } from '../ModalAccount';
 import { Button, Grid, Typography, Link, styled, Stack } from '@mui/material';
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
@@ -34,7 +34,7 @@ export const Header: FC = () => {
     >
       <Grid item>
         <Link component={RouterLink} to="/">
-          <HeaderTitle variant="h5">Aura</HeaderTitle>
+          <HeaderTitle sx={{ typography: 'h5' }}>Aura</HeaderTitle>
         </Link>
       </Grid>
       <Grid item>
@@ -58,7 +58,7 @@ export const Header: FC = () => {
                 <Button variant="outlined" onClick={handleOpen}>
                   {mediumAddress(address)} [{chainId}]
                 </Button>
-                <AccountModal open={open} onClose={handleClose} />
+                <ModalAccount open={open} onClose={handleClose} />
               </>
             ) : (
               <Button variant="contained" onClick={connect}>

@@ -9,8 +9,6 @@ const HeaderTitle = styled(Typography)`
   font-size: 0.875rem;
 `;
 
-// Might be overcooked but probably gives us more flexibility in style
-
 export const PoolsTable: FC = () => {
   const { data: pools } = usePoolInfo(['14', '19', '30']);
   const [expanded, setExpanded] = useState<number>();
