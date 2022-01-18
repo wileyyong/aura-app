@@ -41,8 +41,10 @@ const StyledAccordion = styled(Accordion)<{ highlighted: boolean }>`
   background: ${({ theme, highlighted }: any) =>
     highlighted ? theme.palette.grey[900] : theme.palette.grey[200]};
 
-  color: ${({ theme, highlighted }: any) =>
-    highlighted ? theme.palette.grey[100] : theme.palette.grey[900]};
+  & .MuiAccordionSummary-root {
+    color: ${({ theme, highlighted }: any) =>
+      highlighted ? theme.palette.grey[100] : theme.palette.grey[900]};
+  }
 
   & .MuiCollapse-root {
     background: ${({ theme }) => theme.palette.background.default};
