@@ -10,7 +10,9 @@ import React, {
 } from 'react';
 import { ADDRESS } from '../constants';
 import { CrvDepositor, CvxLocker, CvxLocker__factory } from '../typechain';
+import { CvxRewardPool } from '../typechain/CvxRewardPool';
 import { CrvDepositor__factory } from '../typechain/factories/CrvDepositor__factory';
+import { CvxRewardPool__factory } from '../typechain/factories/CvxRewardPool__factory';
 import { useAddress, useChainId, useProvider } from './AppProvider';
 
 interface State {
@@ -18,6 +20,7 @@ interface State {
   crv?: string;
   contracts: {
     cvxLocker?: CvxLocker;
+    cvxRewardPool?: CvxRewardPool;
     crvDepositer?: CrvDepositor;
   };
 }
@@ -49,9 +52,14 @@ export const DataProvider: FC = ({ children }) => {
         ADDRESS[chainId].cvxLocker,
         provider,
       );
+      const cvxRewardPool = CvxRewardPool__factory.connect(
+        ADDRESS[chainId].cvxRewardPool,
+        provider,
+      );
       return {
         crvDepositer,
         cvxLocker,
+        cvxRewardPool,
       };
     },
     [chainId],

@@ -45,6 +45,13 @@ export const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         disableElevation: true,
+        root: {
+          borderRadius: '0.75rem',
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: 'none',
+          },
+        },
       },
     },
   },

@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { Box, Typography } from '@mui/material';
 import { AccordionInput } from '../../shared/AccordionInput';
-import useLockedCVXAPR from '../../../hooks/useLockedCVXAPR';
-import useStakedCVXAPR from '../../../hooks/useStakedCVXAPR';
+import { useLockedCVXAPR } from '../../../hooks/useLockedCVXAPR';
+import { useStakedCVXAPR } from '../../../hooks/useStakedCVXAPR';
 
 export const Lock: FC = () => {
-  const { data: stakedCVXAPR } = useStakedCVXAPR();
+  const stakedCVXAPR = useStakedCVXAPR();
   const lockedCVXAPR = useLockedCVXAPR();
 
   return (

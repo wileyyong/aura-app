@@ -5,7 +5,7 @@ import { useContracts } from '../context/DataProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
 
-export default function useLockedCVXAPR() {
+export const useLockedCVXAPR = () => {
   const chainId = useChainId();
   const contracts = useContracts();
   const [apr, setApr] = useState(0);
@@ -49,4 +49,4 @@ export default function useLockedCVXAPR() {
   }, [chainId, crvPrice, cvxLocker, cvxPrice]);
 
   return useMemo(() => apr, [apr]);
-}
+};

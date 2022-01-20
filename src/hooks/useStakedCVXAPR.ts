@@ -1,32 +1,17 @@
-import useSWR from 'swr';
-
 import usePrice from './usePrice';
 import { ADDRESS } from '../constants';
-import getTotalSupply from '../fetchers/totalSupply';
-import getRewardRate from '../fetchers/rewardRate';
 import { useChainId } from '../context/AppProvider';
+import { useEffect, useMemo, useState } from 'react';
+import { parseBN } from '../utils';
+import { useContracts } from '../context/DataProvider';
 
 // NOTE: CVX rewards address. Total supply * CVX price is TVL
-const stakedAddress = '0xCF50b810E57Ac33B91dCF525C6ddd9881B139332';
-
-async function fetchCVXAPR(_: any, cvxPrice: number, crvPrice: number) {
-  const totalSupply = await getTotalSupply(stakedAddress);
-  const rewardRate = await getRewardRate(stakedAddress);
-
-  const supply = totalSupply.mul(cvxPrice);
-
-  const rewardRateN = Number(rewardRate.toString());
-  const supplyN = Number(supply.toString());
-
-  const rate = rewardRateN / supplyN;
-
-  const crvPerYear = rate * 86400 * 365;
-
-  return crvPerYear * crvPrice;
-}
-
-export default function useStakedCVXAPR() {
+export const useStakedCVXAPR = () => {
   const chainId = useChainId();
+  const contracts = useContracts();
+  const [apr, setApr] = useState(0);
+
+  const cvxRewardPool = contracts.cvxRewardPool;
 
   const cvxAddress = chainId && ADDRESS[chainId].cvx;
   const crvAddress = chainId && ADDRESS[chainId].crv;
@@ -39,10 +24,29 @@ export default function useStakedCVXAPR() {
     typeof crvAddress === 'string' ? [crvAddress] : undefined,
   );
 
-  const shouldFetch = chainId && cvxPrice && crvPrice;
+  useEffect(() => {
+    (async () => {
+      if (!cvxRewardPool || !crvPrice || !cvxPrice) return;
 
-  return useSWR(
-    shouldFetch ? ['stakedCVXAPR', cvxPrice, crvPrice] : null,
-    fetchCVXAPR,
-  );
-}
+      const [totalSupply, rewardRate] = await Promise.all([
+        cvxRewardPool.totalSupply(),
+        cvxRewardPool.rewardRate(),
+      ]);
+
+      const supply = totalSupply.mul(cvxPrice);
+
+      const rewardRateN = Number(rewardRate.toString());
+      const supplyN = Number(supply.toString());
+
+      const rate = rewardRateN / supplyN;
+
+      const crvPerYear = rate * 86400 * 365;
+
+      const apr = crvPerYear * parseBN(crvPrice);
+
+      setApr(apr);
+    })();
+  }, [cvxRewardPool, chainId, crvPrice, cvxPrice]);
+
+  return useMemo(() => apr, [apr]);
+};
