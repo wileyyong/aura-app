@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { PoolsTable } from './PoolsTable';
-import { AccordionInput } from '../../shared/AccordionInput';
+import { ConvertAccordion } from '../../shared/AccordionInput/Convert';
 import useStakedCVXCRVAPR from '../../../hooks/useStakedCVXCRVAPR';
 import { HeaderBox } from './HeaderBox';
 import { useUserRewards } from '../../../hooks/useUserRewards';
@@ -24,7 +24,7 @@ export const Stake: FC = () => {
         <Box mb={2}>
           <Typography variant="h6">Convert BAL</Typography>
         </Box>
-        <AccordionInput
+        <ConvertAccordion
           highlighted
           poolId={0}
           symbol={'BAL'}

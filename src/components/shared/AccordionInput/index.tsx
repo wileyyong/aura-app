@@ -7,17 +7,14 @@ import {
   AccordionDetails,
   styled,
   Box,
-  Tabs,
-  Tab,
   Stack,
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
 import { ModalPool } from '../ModalPool';
-import { DepositInput } from '../DepositInput';
-import { WithdrawInput } from '../WithdrawInput';
 
-interface AccordionItemProps {
+export interface AccordionItemProps {
+  details: any;
   poolId: number;
   symbol: string;
   expanded?: boolean;
@@ -58,22 +55,6 @@ const StyledAccordion = styled(Accordion)<{ highlighted: boolean }>`
   }
 `;
 
-const TabPanel = ({ children, value, index, ...other }: any) => (
-  <div
-    role="tabpanel"
-    hidden={value !== index}
-    id={`simple-tabpanel-${index}`}
-    aria-labelledby={`simple-tab-${index}`}
-    {...other}
-  >
-    {value === index && (
-      <Box sx={{ pt: 3 }}>
-        <Typography>{children}</Typography>
-      </Box>
-    )}
-  </div>
-);
-
 export const AccordionInput = ({
   symbol,
   poolId,
@@ -81,16 +62,13 @@ export const AccordionInput = ({
   apr,
   expanded,
   onChange,
+  details,
   highlighted = false,
 }: AccordionItemProps) => {
-  const [tabValue, setTabValue] = useState(0);
-
   const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   const handleOpen = () => setInfoModalOpen(true);
   const handleClose = () => setInfoModalOpen(false);
-
-  const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
   const handleInfoClick = (event?: MouseEvent<SVGSVGElement>) => {
     event?.stopPropagation();
@@ -141,28 +119,7 @@ export const AccordionInput = ({
             </Grid>
           </Grid>
         </AccordionSummary>
-        <AccordionDetails>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="basic tabs example"
-            >
-              <Tab label="Deposit" />
-              <Tab label="Unstake" />
-              <Tab label="Info" />
-            </Tabs>
-          </Box>
-          <TabPanel value={tabValue} index={0}>
-            <DepositInput label="Amount to deposit" buttonLabel="Stake" />
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <WithdrawInput label="Amount to withdraw" buttonLabel="Unstake" />
-          </TabPanel>
-          <TabPanel value={tabValue} index={2}>
-            Info...
-          </TabPanel>
-        </AccordionDetails>
+        <AccordionDetails>{details}</AccordionDetails>
       </StyledAccordion>
       <ModalPool open={infoModalOpen} onClose={handleClose} />
     </Grid>

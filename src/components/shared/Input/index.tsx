@@ -20,7 +20,7 @@ export const Input = ({ onMaxClick, label }: InputProps) => {
   return (
     <TextFieldWrapper>
       <TextField
-        sx={{ minWidth: '300px' }}
+        sx={{ minWidth: '380px' }}
         InputLabelProps={{ shrink: true }}
         size="small"
         label={label}
