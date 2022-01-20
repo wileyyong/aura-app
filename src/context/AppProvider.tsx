@@ -67,14 +67,11 @@ export const AppProvider: FC = ({ children }) => {
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [chainId, setChainId] = useState<number>(DEFAULT_CHAIN_ID);
   const [web3ModalProvider, setWeb3ModalProvider] = useState<any | null>(null);
-  const [provider, setProvider] = useState<
-    Web3Provider | JsonRpcProvider | undefined
-  >(new JsonRpcProvider(RPC_URLS[DEFAULT_CHAIN_ID]));
-
-  const handleAddressChange = useCallback(
-    (address: string[]) => setAddress(address?.[0]),
-    [],
+  const [provider, setProvider] = useState<Web3Provider | JsonRpcProvider | undefined>(
+    new JsonRpcProvider(RPC_URLS[DEFAULT_CHAIN_ID]),
   );
+
+  const handleAddressChange = useCallback((address: string[]) => setAddress(address?.[0]), []);
 
   const handleChainIdChange = useCallback(
     (chainId: number) => setChainId(parseChainId(chainId)),
@@ -134,15 +131,12 @@ export const AppProvider: FC = ({ children }) => {
 
 export const useChainId = (): State['chainId'] => useContext(context).chainId;
 
-export const useProvider = (): State['provider'] =>
-  useContext(context).provider;
+export const useProvider = (): State['provider'] => useContext(context).provider;
 
 export const useConnect = (): State['connect'] => useContext(context).connect;
 
-export const useDisconnect = (): State['disconnect'] =>
-  useContext(context).disconnect;
+export const useDisconnect = (): State['disconnect'] => useContext(context).disconnect;
 
-export const useAddress = (): State['address'] =>
-  useContext(context).address?.toLowerCase();
+export const useAddress = (): State['address'] => useContext(context).address?.toLowerCase();
 
 export const useSigner = (): State['signer'] => useContext(context).signer;

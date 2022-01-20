@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { ThemeProvider } from '@mui/system';
 import { Route, Switch, HashRouter } from 'react-router-dom';
+import './App.css';
 
 import { Home } from './pages/Home';
 import { theme } from '../theme';
@@ -12,7 +13,7 @@ import { Stake } from './pages/Stake';
 import { Lock } from './pages/Lock';
 import { Container } from '@mui/material';
 
-import './App.css';
+import { ContractProvider } from '../context/ContractProvider';
 
 const Routes: FC = () => {
   return (
@@ -38,11 +39,13 @@ const App: FC = () => {
   return (
     <HashRouter>
       <AppProvider>
-        <DataProvider>
-          <Layout>
-            <Routes />
-          </Layout>
-        </DataProvider>
+        <ContractProvider>
+          <DataProvider>
+            <Layout>
+              <Routes />
+            </Layout>
+          </DataProvider>
+        </ContractProvider>
       </AppProvider>
     </HashRouter>
   );

@@ -1,7 +1,7 @@
 import usePrice from './usePrice';
 import { useChainId } from '../context/AppProvider';
+import { useContracts } from '../context/ContractProvider';
 import { ADDRESS } from '../constants';
-import { useContracts } from '../context/DataProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
 
@@ -10,21 +10,17 @@ export const useLockedCVXAPR = () => {
   const contracts = useContracts();
   const [apr, setApr] = useState(0);
 
-  const cvxLocker = contracts.cvxLocker;
-
   const cvxAddress = chainId && ADDRESS[chainId].cvx;
   const crvAddress = chainId && ADDRESS[chainId].crv;
 
-  const { data: cvxPrice } = usePrice(
-    typeof cvxAddress === 'string' ? [cvxAddress] : undefined,
-  );
+  const { data: cvxPrice } = usePrice(typeof cvxAddress === 'string' ? [cvxAddress] : undefined);
 
-  const { data: crvPrice } = usePrice(
-    typeof crvAddress === 'string' ? [crvAddress] : undefined,
-  );
+  const { data: crvPrice } = usePrice(typeof crvAddress === 'string' ? [crvAddress] : undefined);
 
   useEffect(() => {
     (async () => {
+      const cvxLocker = contracts.cvxLocker;
+
       if (!cvxLocker || !crvPrice || !cvxPrice) return 0;
 
       const [boostedSupply, rewardData] = await Promise.all([
@@ -46,7 +42,7 @@ export const useLockedCVXAPR = () => {
 
       setApr(apr);
     })();
-  }, [chainId, crvPrice, cvxLocker, cvxPrice]);
+  }, [chainId, crvPrice, cvxPrice, contracts]);
 
   return useMemo(() => apr, [apr]);
 };
