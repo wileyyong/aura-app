@@ -10,8 +10,8 @@ export const theme = createTheme({
       main: blue[100],
     },
   },
-  myField: {
-    myNestedField: '',
+  transparent: {
+    main: 'rgba(45, 45, 45, 0.1)',
   },
   components: {
     MuiTypography: {

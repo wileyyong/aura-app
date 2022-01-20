@@ -2,8 +2,8 @@ import '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface CustomTheme {
-    myField?: {
-      myNestedField?: string;
+    transparent: {
+      main: string;
     };
   }
 
