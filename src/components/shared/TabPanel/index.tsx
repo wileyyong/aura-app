@@ -1,13 +1,5 @@
-import { useState } from 'react';
-import {
-  Typography,
-  Box,
-  Tabs,
-  Tab,
-} from '@mui/material';
-import { DepositInput } from '../DepositInput';
-import { WithdrawInput } from '../WithdrawInput';
-import { AccordionInput, AccordionItemProps } from "../AccordionInput";
+import React from 'react';
+import { Typography, Box } from '@mui/material';
 
 export const TabPanel = ({ children, value, index, ...other }: any) => (
   <div

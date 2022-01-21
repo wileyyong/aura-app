@@ -6,7 +6,6 @@ import {
   Typography,
   AccordionDetails,
   styled,
-  Box,
   Stack,
 } from '@mui/material';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -86,9 +85,7 @@ export const AccordionInput = ({
         sx={{ width: '100%' }}
       >
         <AccordionSummary
-          expandIcon={
-            onChange && <ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />
-          }
+          expandIcon={onChange && <ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
         >
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={4}>
@@ -103,18 +100,12 @@ export const AccordionInput = ({
                 </Stack>
               </Grid>
               <Grid item xs={4}>
-                {highlighted && (
-                  <Typography variant="body2">My Stake</Typography>
-                )}
-                <Typography>
-                  Share: {share && (share * 100).toFixed(2)}%
-                </Typography>
+                {highlighted && <Typography variant="body2">My Stake</Typography>}
+                <Typography>Share: {share && (share * 100).toFixed(2)}%</Typography>
               </Grid>
               <Grid item xs={4}>
                 {highlighted && <Typography textAlign="left">TVL</Typography>}
-                <Typography variant="body2">
-                  Share: {share && (share * 100).toFixed(2)}%
-                </Typography>
+                <Typography variant="body2">Share: {share && (share * 100).toFixed(2)}%</Typography>
               </Grid>
             </Grid>
           </Grid>

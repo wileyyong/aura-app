@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Typography, Box, Tabs, Tab } from '@mui/material';
+import { Box, Tabs, Tab } from '@mui/material';
 import { DepositInput } from '../DepositInput';
-import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput, AccordionItemProps } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 
@@ -18,17 +17,16 @@ export const LockAccordion = (props: LockAccordionProps) => {
       details={
         <>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs
-              value={tabValue}
-              onChange={handleTabChange}
-              aria-label="basic tabs example"
-            >
+            <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
               <Tab label="Lock" />
               <Tab label="Info" />
             </Tabs>
           </Box>
           <TabPanel value={tabValue} index={0}>
-            <DepositInput label={`Amount of ${props.symbol} to lock`} buttonLabel={`Lock ${props.symbol}`} />
+            <DepositInput
+              label={`Amount of ${props.symbol} to lock`}
+              buttonLabel={`Lock ${props.symbol}`}
+            />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
             Info...
