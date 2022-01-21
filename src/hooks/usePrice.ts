@@ -23,23 +23,13 @@ function toFixed(x: any) {
   return x.toString();
 }
 
-async function fetchPrice(
-  _: string,
-  contractAddresses: string[],
-  currency: string,
-) {
+async function fetchPrice(_: string, contractAddresses: string[], currency: string) {
   const price = await getPrice(contractAddresses, currency);
   return ethers.BigNumber.from(toFixed(price * 1e18));
 }
 
-export default function usePrice(
-  addresses: undefined | string[],
-  currency = 'USD',
-) {
+export default function usePrice(addresses: undefined | string[], currency = 'USD') {
   const shouldFetch = addresses && addresses.length <= 0;
 
-  return useSWR(
-    shouldFetch ? null : ['getPrice', addresses, currency],
-    fetchPrice,
-  );
+  return useSWR(shouldFetch ? null : ['getPrice', addresses, currency], fetchPrice);
 }

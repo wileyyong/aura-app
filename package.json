@@ -41,7 +41,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "typechain": "npx typechain --target=ethers-v5 --out-dir=src/typechain 'abis/*.json'",
-    "format": "prettier --write \"./src/**/*.{txs,ts,css}\""
+    "format": "prettier --write \"./src/**/*.{txs,ts,css}\" --ignore-path \"./src/typechain/**/*.ts\""
   },
   "eslintConfig": {
     "extends": [

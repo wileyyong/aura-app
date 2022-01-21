@@ -1,8 +1,6 @@
 import { ALCHEMY_URL } from '../constants';
 
-export default async function alchemyFetcher(
-  fetchParams: (string | { [key: string]: string })[],
-) {
+export default async function alchemyFetcher(fetchParams: (string | { [key: string]: string })[]) {
   const params = {
     jsonrpc: '2.0',
     method: 'eth_call',

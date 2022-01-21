@@ -32,20 +32,16 @@ export default function useMulticall(itf: Interface) {
 
       const multiCall = Multicall__factory.connect(multicallAddress, provider);
 
-      const calldata: { target: string; callData: any }[] = callsFlat.map(
-        call => ({
-          target: call.address.toLowerCase(),
-          callData: itf.encodeFunctionData(call.name, call.params),
-        }),
-      );
+      const calldata: { target: string; callData: any }[] = callsFlat.map(call => ({
+        target: call.address.toLowerCase(),
+        callData: itf.encodeFunctionData(call.name, call.params),
+      }));
 
       const { returnData } = await multiCall.aggregate(calldata, {
         gasLimit: MAX_GAS_LIMIT[chainId],
       });
 
-      const resp = returnData.map((call, i) =>
-        itf.decodeFunctionResult(callsFlat[i].name, call),
-      );
+      const resp = returnData.map((call, i) => itf.decodeFunctionResult(callsFlat[i].name, call));
 
       return chunkSize > 1 ? chunk(resp, chunkSize) : resp;
     },

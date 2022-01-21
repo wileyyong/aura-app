@@ -34,8 +34,7 @@ export const MAX_GAS_LIMIT: { [key: number]: number } = {
 
 export const COIN_GECKO_IDS = [];
 
-export const ALCHEMY_URL =
-  'https://eth-mainnet.alchemyapi.io/v2/ZleB0te5a-wfQW12hzF27wfEGVRKvwwB';
+export const ALCHEMY_URL = 'https://eth-mainnet.alchemyapi.io/v2/ZleB0te5a-wfQW12hzF27wfEGVRKvwwB';
 
 export const RPC_URLS: { [key: number]: string } = {
   1: 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',

@@ -2,12 +2,7 @@ import { ethers } from 'ethers';
 
 export default function cvxMintAmount(
   crvEarned: number,
-  {
-    reductionPerCliff,
-    totalCliffs,
-    totalSupply,
-    maxSupply,
-  }: { [key: string]: ethers.BigNumber },
+  { reductionPerCliff, totalCliffs, totalSupply, maxSupply }: { [key: string]: ethers.BigNumber },
 ) {
   const currentCliff = totalSupply.div(reductionPerCliff);
   const currentCliffN = Number(currentCliff.toString());

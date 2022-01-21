@@ -7,10 +7,7 @@
  */
 const coinGeckoUrl = 'https://api.coingecko.com/api/v3';
 
-export default async function getPrice(
-  contractAddresses: string[],
-  currency = 'USD',
-) {
+export default async function getPrice(contractAddresses: string[], currency = 'USD') {
   const url =
     coinGeckoUrl +
     '/simple/token_price/ethereum?contract_addresses=' +

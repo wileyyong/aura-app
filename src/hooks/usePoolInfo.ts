@@ -1,11 +1,7 @@
 import useSWR from 'swr';
 import { BigNumber } from 'ethers';
 
-import {
-  Booster__factory,
-  Erc20__factory,
-  Registry__factory,
-} from '../typechain';
+import { Booster__factory, Erc20__factory, Registry__factory } from '../typechain';
 import { ADDRESS } from '../constants';
 import { useChainId } from '../context/AppProvider';
 import useMulticall, { Call } from './useMulticall';
@@ -46,9 +42,7 @@ async function fetchPools(
   erc20Multicall: (
     call: Call[] | Array<Call[]>,
   ) => Promise<undefined | [string][][] | [BigNumber][][]>,
-  registryMulticall: (
-    call: Call[] | Array<Call[]>,
-  ) => Promise<undefined | [string][]>,
+  registryMulticall: (call: Call[] | Array<Call[]>) => Promise<undefined | [string][]>,
 ) {
   const boosterAddress = ADDRESS[chainId].booster;
   const registryAddress = ADDRESS[chainId].registry;
@@ -120,14 +114,7 @@ export default function usePoolInfo(poolIds: string[]) {
   const registryMulticall = useMulticall(registryItf);
 
   return useSWR(
-    [
-      'poolInfo',
-      chainId,
-      poolIds,
-      boosterMulticall,
-      erc20Multicall,
-      registryMulticall,
-    ],
+    ['poolInfo', chainId, poolIds, boosterMulticall, erc20Multicall, registryMulticall],
     fetchPools,
   );
 }

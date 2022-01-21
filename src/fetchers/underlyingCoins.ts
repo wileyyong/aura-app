@@ -15,8 +15,6 @@ export default async function underlyingCoins(
   const underlying = await registry.get_underlying_coins(contractAddress);
 
   return underlying.filter(
-    x =>
-      ethers.BigNumber.from(x).gt('0') &&
-      x !== '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    x => ethers.BigNumber.from(x).gt('0') && x !== '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
   );
 }

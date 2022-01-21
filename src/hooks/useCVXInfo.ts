@@ -6,11 +6,7 @@ import useMulticall, { Call } from './useMulticall';
 import { Cvx__factory } from '../typechain/factories/Cvx__factory';
 import { useChainId } from '../context/AppProvider';
 
-async function fetcher(
-  _: string,
-  chainId: number,
-  multicall: (calls: Call[]) => Promise<any>,
-) {
+async function fetcher(_: string, chainId: number, multicall: (calls: Call[]) => Promise<any>) {
   const calls = [
     { address: ADDRESS[chainId].cvx, name: 'reductionPerCliff', params: [] },
     { address: ADDRESS[chainId].cvx, name: 'totalCliffs', params: [] },

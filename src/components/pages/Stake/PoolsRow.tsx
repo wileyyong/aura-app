@@ -15,8 +15,7 @@ export const PoolsRow = ({ expanded, onChange, pool }: PoolsRowProps) => {
   const { data: apr } = usePoolApr(pool);
 
   const share =
-    Number(pool.tokenTotalSupply.toString()) /
-    Number(pool.lptokenTotalSupply.toString());
+    Number(pool.tokenTotalSupply.toString()) / Number(pool.lptokenTotalSupply.toString());
 
   return (
     <StakeBalLpAccordion
