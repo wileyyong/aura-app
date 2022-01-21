@@ -18,7 +18,7 @@ export interface AccordionItemProps {
   symbol: string;
   expanded?: boolean;
   onChange?: any;
-  apr?: number;
+  apr?: { total: number; [key: string]: number };
   tvl?: number;
   share?: number;
   highlighted?: boolean;
@@ -95,7 +95,7 @@ export const AccordionInput = ({
               <Grid item xs={4}>
                 {highlighted && <Typography variant="body2">vARP</Typography>}
                 <Stack direction="row">
-                  <Typography>{apr && (apr * 100).toFixed(2)}%</Typography>
+                  <Typography>{apr && (apr.total * 100).toFixed(2)}%</Typography>
                   <Info onClick={handleInfoClick} />
                 </Stack>
               </Grid>

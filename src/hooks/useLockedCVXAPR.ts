@@ -44,5 +44,10 @@ export const useLockedCVXAPR = () => {
     })();
   }, [chainId, crvPrice, cvxPrice, contracts]);
 
-  return useMemo(() => apr, [apr]);
+  return useMemo(
+    () => ({
+      total: apr,
+    }),
+    [apr],
+  );
 };

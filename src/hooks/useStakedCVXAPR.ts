@@ -44,5 +44,5 @@ export const useStakedCVXAPR = () => {
     })();
   }, [cvxRewardPool, chainId, crvPrice, cvxPrice]);
 
-  return useMemo(() => apr, [apr]);
+  return useMemo(() => ({ total: apr }), [apr]);
 };

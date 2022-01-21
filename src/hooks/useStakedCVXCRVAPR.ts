@@ -14,12 +14,7 @@ const stakeContract = '0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e';
 const threePoolStakeContract = '0x7091dbb7fcbA54569eF1387Ac89Eb2a5C9F6d2EA';
 const swap = '0xbEbc44782C7dB0a1A60Cb6fe97d0b483032FF1C7';
 
-async function fetchStakedCVXCRVAPR(
-  _: string,
-  cvxPrice: number,
-  crvPrice: number,
-  cvxInfo: any,
-) {
+async function fetchStakedCVXCRVAPR(_: string, cvxPrice: number, crvPrice: number, cvxInfo: any) {
   const [rate, threeRate, supply, virtualPrice] = await Promise.all([
     getRewardRate(stakeContract),
     getRewardRate(threePoolStakeContract),
@@ -44,7 +39,7 @@ async function fetchStakedCVXCRVAPR(
   const cvxAPR = cvxPerYear * cvxPrice;
   const threeAPR = threePoolPerYear * virtualPriceN * 1e18;
 
-  return crvAPR + cvxAPR + threeAPR;
+  return { total: crvAPR + cvxAPR + threeAPR, crvAPR, cvxAPR, threeAPR };
 }
 
 export default function useStakedCVXCRVAPR() {
@@ -53,13 +48,9 @@ export default function useStakedCVXCRVAPR() {
   const cvxAddress = chainId && ADDRESS[chainId].cvx;
   const crvAddress = chainId && ADDRESS[chainId].crv;
 
-  const { data: cvxPrice } = usePrice(
-    typeof cvxAddress === 'string' ? [cvxAddress] : undefined,
-  );
+  const { data: cvxPrice } = usePrice(typeof cvxAddress === 'string' ? [cvxAddress] : undefined);
 
-  const { data: crvPrice } = usePrice(
-    typeof crvAddress === 'string' ? [crvAddress] : undefined,
-  );
+  const { data: crvPrice } = usePrice(typeof crvAddress === 'string' ? [crvAddress] : undefined);
 
   const { data: cvxInfo } = useCVXInfo();
 
