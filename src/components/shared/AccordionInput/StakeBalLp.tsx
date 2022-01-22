@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   Tabs,
@@ -9,6 +8,7 @@ import {
   Switch,
   Collapse,
 } from '@mui/material';
+import { useState } from 'react';
 
 import { TabPanel } from '../TabPanel';
 import { DepositInput } from '../DepositInput';

@@ -24,6 +24,7 @@
     "namor": "^2.0.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-hook-form": "^7.25.0",
     "react-loading-skeleton": "^2.2.0",
     "react-modal-hook": "^3.0.0",
     "react-router-dom": "^5.2.0",
