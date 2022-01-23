@@ -12,7 +12,7 @@ export const useBalanceOf = (tokenAddress: string, address: string | undefined) 
 
   const token = useMemo(
     () => provider && address && Erc20__factory.connect(tokenAddress, provider),
-    [provider, tokenAddress],
+    [address, provider, tokenAddress],
   );
 
   return useSWR(token ? ['balanceOf', token, address] : null, fetchBalance);

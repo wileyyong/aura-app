@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import { Web3Provider } from '@ethersproject/providers';
 
 import { useChainId, useProvider } from '../context/AppProvider';
-import usePrice from './usePrice';
 import useCVXInfo from './useCVXInfo';
 import { Pool } from './usePoolInfo';
 import getRewardRate from '../fetchers/rewardRate';
@@ -10,10 +9,11 @@ import getCurveLpValue from '../fetchers/curveLpValue';
 import getTotalSupply from '../fetchers/totalSupply';
 import cvxMintAmount from '../fetchers/cvxMintAmount';
 import getUnderlyingCoins from '../fetchers/underlyingCoins';
-import getPrice from '../fetchers/price';
+import { getAveragePrice } from '../fetchers/price';
 
 import { ADDRESS } from '../constants';
 import { BigNumber } from 'ethers';
+import { useTokenPrice } from '../context/DataProvider';
 
 async function fetchPoolApr(
   _: string,
@@ -30,7 +30,7 @@ async function fetchPoolApr(
     getTotalSupply(pool.crvRewards),
     getUnderlyingCoins(chainId, pool.swap, provider),
   ]);
-  const underlyingPrice = await getPrice(underlyingCoins);
+  const underlyingPrice = await getAveragePrice(underlyingCoins);
 
   const rewardRateN = Number(rewardRate.toString());
   const totalSupplyN = Number(totalSupply.toString());
@@ -55,12 +55,8 @@ export default function usePoolApr(pool: Pool) {
   const provider = useProvider();
   const { data: cvxInfo } = useCVXInfo();
 
-  const cvxAddress = chainId && ADDRESS[chainId].cvx;
-  const crvAddress = chainId && ADDRESS[chainId].crv;
-
-  const { data: cvxPrice } = usePrice(typeof cvxAddress === 'string' ? [cvxAddress] : undefined);
-
-  const { data: crvPrice } = usePrice(typeof crvAddress === 'string' ? [crvAddress] : undefined);
+  const cvxPrice = useTokenPrice(ADDRESS[chainId].cvx);
+  const crvPrice = useTokenPrice(ADDRESS[chainId].crv);
 
   const shouldFetch = pool && chainId && cvxPrice && crvPrice;
 

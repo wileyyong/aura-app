@@ -1,9 +1,9 @@
-import usePrice from './usePrice';
 import { ADDRESS } from '../constants';
 import { useChainId } from '../context/AppProvider';
 import { useContracts } from '../context/ContractProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
+import { useTokenPrice } from '../context/DataProvider';
 
 // NOTE: CVX rewards address. Total supply * CVX price is TVL
 export const useStakedCVXAPR = () => {
@@ -13,12 +13,8 @@ export const useStakedCVXAPR = () => {
 
   const cvxRewardPool = contracts.cvxRewardPool;
 
-  const cvxAddress = chainId && ADDRESS[chainId].cvx;
-  const crvAddress = chainId && ADDRESS[chainId].crv;
-
-  const { data: cvxPrice } = usePrice(typeof cvxAddress === 'string' ? [cvxAddress] : undefined);
-
-  const { data: crvPrice } = usePrice(typeof crvAddress === 'string' ? [crvAddress] : undefined);
+  const cvxPrice = useTokenPrice(ADDRESS[chainId].cvx);
+  const crvPrice = useTokenPrice(ADDRESS[chainId].crv);
 
   useEffect(() => {
     (async () => {

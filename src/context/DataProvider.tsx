@@ -1,10 +1,13 @@
 import React, { FC, createContext, useEffect, useMemo, useContext, useState } from 'react';
+import { usePrices } from '../hooks/usePrices';
 import { useProvider } from './AppProvider';
 import { useContracts } from './ContractProvider';
+import { BigNumber } from 'ethers';
+import { TOKENS } from '../constants';
 
 interface State {
   initialised: boolean;
-  crv?: string;
+  prices?: Record<string, BigNumber>;
 }
 
 interface Dispatch {
@@ -18,9 +21,13 @@ const initialState = {
 const stateCtx = createContext<State>(null as never);
 const dispatchCtx = createContext<Dispatch>(null as never);
 
+/* MARK: - Data provider
+ */
+
 export const DataProvider: FC = ({ children }) => {
   const provider = useProvider();
   const contracts = useContracts();
+  const prices = usePrices(TOKENS);
 
   const [state, setState] = useState<State>(initialState);
 
@@ -28,22 +35,15 @@ export const DataProvider: FC = ({ children }) => {
 
   useEffect(() => {
     (async () => {
-      if (!provider || state.initialised) return;
-      try {
-        const crv = await contracts.crvDepositor?.crv();
+      if (!provider || !prices || state.initialised) return;
 
-        const newState = {
-          ...state,
-          initialised: true,
-          crv,
-        };
-
-        setState(newState);
-      } catch (error) {
-        console.log(error);
-      }
+      setState({
+        ...state,
+        initialised: true,
+        prices,
+      });
     })();
-  }, [contracts, provider, state]);
+  }, [contracts, prices, provider, state]);
 
   return (
     <stateCtx.Provider value={useMemo(() => state, [state])}>
@@ -60,5 +60,10 @@ export const useDataProvider = (): [State, Dispatch] => [
 ];
 
 export const useDataState = (): State => useContext(stateCtx);
+
+export const useTokenPrices = (): State['prices'] => useContext(stateCtx).prices;
+
+export const useTokenPrice = (address: string): BigNumber | undefined =>
+  useContext(stateCtx).prices?.[address.toLowerCase()];
 
 export const useDataDispatch = (): Dispatch => useContext(dispatchCtx);

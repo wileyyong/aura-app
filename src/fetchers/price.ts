@@ -7,7 +7,10 @@
  */
 const coinGeckoUrl = 'https://api.coingecko.com/api/v3';
 
-export default async function getPrice(contractAddresses: string[], currency = 'USD') {
+export const getPrices = async (
+  contractAddresses: string[],
+  currency = 'USD',
+): Promise<Record<string, { usd: number }>> => {
   const url =
     coinGeckoUrl +
     '/simple/token_price/ethereum?contract_addresses=' +
@@ -18,9 +21,15 @@ export default async function getPrice(contractAddresses: string[], currency = '
   const resp = await fetch(url);
   const data = await resp.json();
 
+  return data;
+};
+
+export const getAveragePrice = async (contractAddresses: string[], currency = 'USD') => {
+  const data = await getPrices(contractAddresses);
+
   const [priceSum, c] = Object.keys(data).reduce(
     ([sum, count], key) => {
-      const p = data[key]?.[currency.toLowerCase()] || 0;
+      const p = data[key]?.[currency.toLowerCase() as 'usd'] || 0;
       if (p > 0) {
         return [sum + p, count + 1];
       }
@@ -30,4 +39,4 @@ export default async function getPrice(contractAddresses: string[], currency = '
   );
 
   return priceSum / c;
-}
+};

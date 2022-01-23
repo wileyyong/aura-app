@@ -32,6 +32,15 @@ export const ADDRESS: { [key: number]: Contracts } = {
   },
 };
 
+const EthereumERC20 = ADDRESS[Network.EthereumMainnet];
+
+export const TOKENS = [
+  EthereumERC20.crv,
+  EthereumERC20.cvx,
+  EthereumERC20.cvxCRV,
+  // expand when needed...
+];
+
 export const MAX_GAS_LIMIT: { [key: number]: number } = {
   1: 30000000,
 };

@@ -4,16 +4,16 @@ import useSWR from 'swr';
 import { getPrices } from '../fetchers/price';
 import { toBN } from '../utils';
 
-async function fetchPrice(_: string, contractAddress: string, currency: string) {
-  const data = await getPrices([contractAddress], currency);
+async function fetchPrices(_: string, contractAddresses: string[], currency: string) {
+  const data = await getPrices(contractAddresses, currency);
   const priceArr = Object.keys(data).map(k => ({
     [k]: toBN(data[k].usd),
   }));
   const prices = priceArr.reduce((a, b) => ({ ...a, ...b }), {});
-  return prices[contractAddress.toLowerCase()];
+  return prices;
 }
 
-export const usePrice = (contractAddress: string): BigNumber | undefined => {
-  const { data } = useSWR(['getPrice', contractAddress, 'usd'], fetchPrice);
+export const usePrices = (contractAddress: string[]): Record<string, BigNumber> | undefined => {
+  const { data } = useSWR(['getPrices', contractAddress, 'usd'], fetchPrices);
   return useMemo(() => (!data ? undefined : data), [data]);
 };

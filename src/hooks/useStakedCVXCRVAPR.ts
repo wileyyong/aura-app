@@ -1,6 +1,5 @@
 import useSWR from 'swr';
 
-import usePrice from './usePrice';
 import useCVXInfo from './useCVXInfo';
 
 import getRewardRate from '../fetchers/rewardRate';
@@ -9,6 +8,7 @@ import curveLpValue from '../fetchers/curveLpValue';
 import getCVXMintAmount from '../fetchers/cvxMintAmount';
 import { ADDRESS } from '../constants';
 import { useChainId } from '../context/AppProvider';
+import { useTokenPrice } from '../context/DataProvider';
 
 const stakeContract = '0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e';
 const threePoolStakeContract = '0x7091dbb7fcbA54569eF1387Ac89Eb2a5C9F6d2EA';
@@ -45,12 +45,8 @@ async function fetchStakedCVXCRVAPR(_: string, cvxPrice: number, crvPrice: numbe
 export default function useStakedCVXCRVAPR() {
   const chainId = useChainId();
 
-  const cvxAddress = chainId && ADDRESS[chainId].cvx;
-  const crvAddress = chainId && ADDRESS[chainId].crv;
-
-  const { data: cvxPrice } = usePrice(typeof cvxAddress === 'string' ? [cvxAddress] : undefined);
-
-  const { data: crvPrice } = usePrice(typeof crvAddress === 'string' ? [crvAddress] : undefined);
+  const cvxPrice = useTokenPrice(ADDRESS[chainId].cvx);
+  const crvPrice = useTokenPrice(ADDRESS[chainId].crv);
 
   const { data: cvxInfo } = useCVXInfo();
 
