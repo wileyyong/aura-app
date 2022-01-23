@@ -6,6 +6,7 @@ import { Input } from '../Input';
 import { useBalanceOf } from '../../../hooks/useBalanceOf';
 import { useAddress } from '../../../context/AppProvider';
 import { useAllowance } from '../../../hooks/useAllowance';
+import { formatEther } from 'ethers/lib/utils';
 
 export interface DepositInputProps {
   label: string;
@@ -38,7 +39,9 @@ export const DepositInput = ({
   };
 
   const handleMaxClick = () => {
-    setValue('amount', Number(balance?.toString() || '0'), {
+    const value = Number(formatEther(balance || 0));
+
+    setValue('amount', value, {
       shouldDirty: true,
       shouldValidate: true,
     });
