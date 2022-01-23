@@ -9,15 +9,18 @@ import {
   Collapse,
 } from '@mui/material';
 import { useState } from 'react';
+import { BigNumber } from 'ethers';
 
 import { TabPanel } from '../TabPanel';
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput, AccordionItemProps } from '../AccordionInput';
 
-interface StakeBalLpAccordionProps extends Omit<AccordionItemProps, 'details'> {}
+interface StakeBalLpAccordionProps extends Omit<AccordionItemProps, 'details'> {
+  lpTokenBalance?: BigNumber;
+}
 
-export const StakeBalLpAccordion = (props: StakeBalLpAccordionProps) => {
+export const StakeBalLpAccordion = ({ lpTokenBalance, ...props }: StakeBalLpAccordionProps) => {
   const [tabValue, setTabValue] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -50,6 +53,7 @@ export const StakeBalLpAccordion = (props: StakeBalLpAccordionProps) => {
                 </FormGroup>
               </Box>
               <DepositInput
+                max={lpTokenBalance}
                 label={`Amount of ${props.symbol} to deposit and stake`}
                 buttonLabel="Deposit & Stake"
               />
