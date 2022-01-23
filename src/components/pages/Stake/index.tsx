@@ -15,7 +15,10 @@ export const Stake: FC = () => {
     <Box>
       <Grid container direction="row" justifyContent="center" spacing={2}>
         <Grid item>
-          <HeaderBox title="Total Claimable" value={`$${userRewards?.totalUSD?.toFixed(2)}`} />
+          <HeaderBox
+            title="Total Claimable"
+            value={`$${(userRewards?.totalUSD ?? 0).toFixed(2)}`}
+          />
         </Grid>
         <Grid item>
           <HeaderBox title="Total Deposits" value="$0" />
