@@ -3,21 +3,31 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Stack, Button } from '@mui/material';
 
 import { Input } from '../Input';
-import { BigNumber } from 'ethers';
+import { useBalanceOf } from '../../../hooks/useBalanceOf';
+import { useAddress } from '../../../context/AppProvider';
+import { useAllowance } from '../../../hooks/useAllowance';
 
 export interface DepositInputProps {
   label: string;
   buttonLabel: string;
   depositToken: string;
   depositAddress: string;
-  max?: BigNumber;
 }
 
 interface FormValues {
   amount: number;
 }
 
-export const DepositInput = ({ label, max, buttonLabel }: DepositInputProps) => {
+export const DepositInput = ({
+  label,
+  buttonLabel,
+  depositToken,
+  depositAddress,
+}: DepositInputProps) => {
+  const address = useAddress();
+  const { data: balance } = useBalanceOf(depositToken, address);
+  const { data: allowance } = useAllowance(depositToken, address, depositAddress);
+
   const { register, handleSubmit, setValue } = useForm<FormValues>({
     mode: 'onChange',
     reValidateMode: 'onChange',
@@ -28,7 +38,7 @@ export const DepositInput = ({ label, max, buttonLabel }: DepositInputProps) => 
   };
 
   const handleMaxClick = () => {
-    setValue('amount', Number(max?.toString() || '0'), {
+    setValue('amount', Number(balance?.toString() || '0'), {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -38,7 +48,9 @@ export const DepositInput = ({ label, max, buttonLabel }: DepositInputProps) => 
     <form onSubmit={handleSubmit(submit)}>
       <Stack direction="row" spacing={2}>
         <Input label={label} onMaxClick={handleMaxClick} {...register('amount')} />
-        <Button variant="outlined">Approve</Button>
+        <Button variant="outlined" disabled={!allowance?.lte('0')}>
+          Approve
+        </Button>
         <Button variant="contained" type="submit">
           {buttonLabel}
         </Button>
