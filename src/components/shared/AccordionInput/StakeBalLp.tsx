@@ -9,18 +9,22 @@ import {
   Collapse,
 } from '@mui/material';
 import { useState } from 'react';
-import { BigNumber } from 'ethers';
 
 import { TabPanel } from '../TabPanel';
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
+import { useChainId } from '../../../context/AppProvider';
 import { AccordionInput, AccordionItemProps } from '../AccordionInput';
+import { ADDRESS } from '../../../constants';
+import { Pool } from '../../../hooks/usePoolInfo';
 
 interface StakeBalLpAccordionProps extends Omit<AccordionItemProps, 'details'> {
-  lpTokenBalance?: BigNumber;
+  pool: Pool;
 }
 
-export const StakeBalLpAccordion = ({ lpTokenBalance, ...props }: StakeBalLpAccordionProps) => {
+export const StakeBalLpAccordion = ({ pool, ...props }: StakeBalLpAccordionProps) => {
+  const chainId = useChainId();
+
   const [tabValue, setTabValue] = useState(0);
   const [showAdvanced, setShowAdvanced] = useState(false);
 
@@ -29,6 +33,8 @@ export const StakeBalLpAccordion = ({ lpTokenBalance, ...props }: StakeBalLpAcco
   };
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
+
+  const boosterContract = ADDRESS[chainId].booster;
 
   return (
     <AccordionInput
@@ -53,17 +59,25 @@ export const StakeBalLpAccordion = ({ lpTokenBalance, ...props }: StakeBalLpAcco
                 </FormGroup>
               </Box>
               <DepositInput
-                max={lpTokenBalance}
-                label={`Amount of ${props.symbol} to deposit and stake`}
+                depositToken={pool.lptoken}
+                depositAddress={boosterContract}
                 buttonLabel="Deposit & Stake"
+                label={`Amount of ${props.symbol} to deposit and stake`}
               />
               <Collapse in={showAdvanced}>
                 <Stack spacing={3}>
                   <DepositInput
+                    depositToken={pool.lptoken}
+                    depositAddress={boosterContract}
                     label={`Amount of ${props.symbol} to deposit`}
                     buttonLabel="Deposit"
                   />
-                  <DepositInput label={`Amount of ${props.symbol} to stake`} buttonLabel="Stake" />
+                  <DepositInput
+                    depositToken={pool.token}
+                    depositAddress={pool.crvRewards}
+                    label={`Amount of ${props.symbol} to stake`}
+                    buttonLabel="Stake"
+                  />
                 </Stack>
               </Collapse>
             </Stack>

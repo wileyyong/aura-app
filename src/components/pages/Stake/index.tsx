@@ -7,8 +7,9 @@ import { HeaderBox } from './HeaderBox';
 import { useUserRewards } from '../../../hooks/useUserRewards';
 
 export const Stake: FC = () => {
-  const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
   const userRewards = useUserRewards();
+
+  const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
 
   return (
     <Box>
@@ -26,11 +27,11 @@ export const Stake: FC = () => {
         </Box>
         <ConvertAccordion
           highlighted
+          share={0}
           poolId={0}
           symbol={'BAL'}
-          apr={stakedCVXCRVAPR}
-          share={0}
           expanded={true}
+          apr={stakedCVXCRVAPR}
         />
       </Box>
       <Box mb={4}>

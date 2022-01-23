@@ -4,13 +4,19 @@ import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput, AccordionItemProps } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
+import { ADDRESS } from '../../../constants';
+import { useChainId } from '../../../context/AppProvider';
 
 interface StakeAccordionProps extends Omit<AccordionItemProps, 'details'> {}
 
 export const StakeAccordion = (props: StakeAccordionProps) => {
+  const chainId = useChainId();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
+
+  const cvxAddress = ADDRESS[chainId].cvx;
+  const depositAddress = ADDRESS[chainId].cvxRewardPool;
 
   return (
     <AccordionInput
@@ -25,7 +31,12 @@ export const StakeAccordion = (props: StakeAccordionProps) => {
             </Tabs>
           </Box>
           <TabPanel value={tabValue} index={0}>
-            <DepositInput label={`Amount of ${props.symbol} to deposit`} buttonLabel="Stake" />
+            <DepositInput
+              depositToken={cvxAddress}
+              depositAddress={depositAddress}
+              label={`Amount of ${props.symbol} to deposit`}
+              buttonLabel="Stake"
+            />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <WithdrawInput label={`Amount of ${props.symbol} to withdraw`} buttonLabel="Unstake" />

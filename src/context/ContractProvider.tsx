@@ -9,7 +9,7 @@ import { useChainId, useProvider } from './AppProvider';
 interface State {
   cvxLocker?: CvxLocker;
   cvxRewardPool?: CvxRewardPool;
-  crvDepositer?: CrvDepositor;
+  crvDepositor?: CrvDepositor;
 }
 
 const stateCtx = createContext<State>(null as never);
@@ -23,16 +23,16 @@ export const ContractProvider: FC = ({ children }) => {
   useEffect(() => {
     if (!provider) return;
 
-    const { crvDepositer: crvDepositerAddress } = ADDRESS[chainId];
+    const { crvDepositor: crvDepositerAddress } = ADDRESS[chainId];
     const { cvxLocker: cvxLockerAddress } = ADDRESS[chainId];
     const { cvxRewardPool: cvxRewardPoolAddress } = ADDRESS[chainId];
 
-    const crvDepositer = CrvDepositor__factory.connect(crvDepositerAddress, provider);
+    const crvDepositor = CrvDepositor__factory.connect(crvDepositerAddress, provider);
     const cvxLocker = CvxLocker__factory.connect(cvxLockerAddress, provider);
     const cvxRewardPool = CvxRewardPool__factory.connect(cvxRewardPoolAddress, provider);
 
     setState({
-      crvDepositer,
+      crvDepositor,
       cvxLocker,
       cvxRewardPool,
     });

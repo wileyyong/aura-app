@@ -8,6 +8,8 @@ import { BigNumber } from 'ethers';
 export interface DepositInputProps {
   label: string;
   buttonLabel: string;
+  depositToken: string;
+  depositAddress: string;
   max?: BigNumber;
 }
 

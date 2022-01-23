@@ -30,7 +30,7 @@ export const DataProvider: FC = ({ children }) => {
     (async () => {
       if (!provider || state.initialised) return;
       try {
-        const crv = await contracts.crvDepositer?.crv();
+        const crv = await contracts.crvDepositor?.crv();
 
         const newState = {
           ...state,
