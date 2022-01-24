@@ -5,6 +5,9 @@ declare module '@mui/material/styles' {
     transparent: {
       main: string;
     };
+    borderRadius: {
+      main: string;
+    };
   }
 
   interface Theme extends CustomTheme {}

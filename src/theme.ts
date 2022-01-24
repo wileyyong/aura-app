@@ -1,7 +1,16 @@
 import { createTheme } from '@mui/material';
 import { blue } from '@mui/material/colors';
 
-export const theme = createTheme({
+const defaults = createTheme({
+  transparent: {
+    main: 'rgba(45, 45, 45, 0.1)',
+  },
+  borderRadius: {
+    main: '0.75rem',
+  },
+});
+
+export const theme = createTheme(defaults, {
   palette: {
     primary: {
       main: blue[500],
@@ -9,9 +18,6 @@ export const theme = createTheme({
     secondary: {
       main: blue[100],
     },
-  },
-  transparent: {
-    main: 'rgba(45, 45, 45, 0.1)',
   },
   components: {
     MuiTypography: {
@@ -36,6 +42,24 @@ export const theme = createTheme({
         },
       },
     },
+    MuiCollapse: {
+      styleOverrides: {
+        root: {
+          borderBottomLeftRadius: defaults.borderRadius.main,
+          borderBottomRightRadius: defaults.borderRadius.main,
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          ':first-of-type': {
+            borderRadius: defaults.borderRadius.main,
+          },
+        },
+      },
+    },
+
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
@@ -46,7 +70,7 @@ export const theme = createTheme({
       styleOverrides: {
         disableElevation: true,
         root: {
-          borderRadius: '0.75rem',
+          borderRadius: defaults.borderRadius.main,
           boxShadow: 'none',
           '&:hover': {
             boxShadow: 'none',

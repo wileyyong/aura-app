@@ -52,9 +52,7 @@ export const AccordionInfo: FC<Props> = ({
         elevation={0}
         highlighted={highlighted}
       >
-        <AccordionSummary
-          expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
-        >
+        <AccordionSummary expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}>
           <InfoOutlinedIcon sx={{ mr: 1.5 }} />
           <Typography>{title}</Typography>
         </AccordionSummary>
