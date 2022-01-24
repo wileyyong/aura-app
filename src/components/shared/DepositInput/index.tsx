@@ -1,19 +1,20 @@
-import React, {useState} from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import React, { useState } from 'react';
 import { Stack, Button } from '@mui/material';
+import { BigNumberish, ethers } from 'ethers';
+import { formatEther } from 'ethers/lib/utils';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Input } from '../Input';
 import { useBalanceOf } from '../../../hooks/useBalanceOf';
 import { useAddress } from '../../../context/AppProvider';
 import { useAllowance } from '../../../hooks/useAllowance';
-import { formatEther } from 'ethers/lib/utils';
-import { ethers } from 'ethers';
 
 export interface DepositInputProps {
   label: string;
   buttonLabel: string;
   depositToken: string;
   depositAddress: string;
+  onDeposit: (amount: BigNumberish) => void;
 }
 
 interface FormValues {

@@ -1,10 +1,14 @@
 import { FC, useState } from 'react';
+import { BigNumberish } from 'ethers';
 import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
+
 import { DepositInput } from '../DepositInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { ADDRESS } from '../../../constants';
-import { useChainId } from '../../../context/AppProvider';
+import { useAddress, useChainId, useSigner } from '../../../context/AppProvider';
+import { CvxLocker__factory } from '../../../typechain';
+import { handleTx } from '../../../utils/handleTx';
 
 interface Props {
   symbol: string;
@@ -15,12 +19,28 @@ interface Props {
 
 const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   const chainId = useChainId();
+  const signer = useSigner();
+  const address = useAddress();
+
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
   const cvxAddress = ADDRESS[chainId].cvx;
   const cvxLocker = ADDRESS[chainId].cvxLocker;
+
+  const handleLock = (amount: BigNumberish) => {
+    if (!signer || !address) return;
+
+    const contract = CvxLocker__factory.connect(cvxLocker, signer);
+
+    // TODO: double check what this value should be
+    const spendRatio = 0;
+
+    handleTx(() => {
+      return contract.lock(address, amount, spendRatio);
+    });
+  };
 
   return (
     <AccordionDetails>
@@ -32,6 +52,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
       </Box>
       <TabPanel value={tabValue} index={0}>
         <DepositInput
+          onDeposit={handleLock}
           depositToken={cvxAddress}
           depositAddress={cvxLocker}
           label={`Amount of ${props.symbol} to lock`}

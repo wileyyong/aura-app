@@ -5,7 +5,10 @@ import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { ADDRESS } from '../../../constants';
-import { useChainId } from '../../../context/AppProvider';
+import { useChainId, useSigner } from '../../../context/AppProvider';
+import { handleTx } from '../../../utils/handleTx';
+import { CvxRewardPool__factory } from '../../../typechain';
+import { BigNumberish } from 'ethers';
 
 interface Props {
   symbol: string;
@@ -16,12 +19,24 @@ interface Props {
 
 const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   const chainId = useChainId();
+  const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
   const cvxAddress = ADDRESS[chainId].cvx;
   const depositAddress = ADDRESS[chainId].cvxRewardPool;
+
+  // Stake CVX into cvx reward contract
+  const handleDeposit = (amount: BigNumberish) => {
+    if (!signer) return;
+
+    const cvxRewardPool = CvxRewardPool__factory.connect(depositAddress, signer);
+
+    handleTx(() => {
+      return cvxRewardPool.stake(amount);
+    });
+  };
 
   return (
     <AccordionDetails>
@@ -34,6 +49,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
       </Box>
       <TabPanel value={tabValue} index={0}>
         <DepositInput
+          onDeposit={handleDeposit}
           depositToken={cvxAddress}
           depositAddress={depositAddress}
           label={`Amount of ${props.symbol} to deposit`}

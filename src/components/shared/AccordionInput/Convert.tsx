@@ -1,11 +1,15 @@
 import { useState, FC } from 'react';
+import { BigNumberish } from 'ethers';
 import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
+
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
-import { useChainId } from '../../../context/AppProvider';
+import { useChainId, useSigner } from '../../../context/AppProvider';
 import { ADDRESS } from '../../../constants';
+import { CrvDepositor__factory } from '../../../typechain';
+import { handleTx } from '../../../utils/handleTx';
 
 interface Props {
   symbol: string;
@@ -14,14 +18,26 @@ interface Props {
   share?: number;
 }
 
-const AccordionInputDetails: FC<Props> = ({ ...props }) => {
+const AccordionInputDetails: FC<Props> = () => {
   const chainId = useChainId();
+  const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
   const depositToken = ADDRESS[chainId].crv;
   const depositAddress = ADDRESS[chainId].crvDepositor;
+  const stakeAddress = ADDRESS[chainId].cvxCRVStaking;
+
+  const handleDeposit = (amount: BigNumberish) => {
+    if (!signer) return;
+
+    const crvDepositor = CrvDepositor__factory.connect(depositAddress, signer);
+
+    handleTx(() => {
+      return crvDepositor['deposit(uint256,bool,address)'](amount, false, stakeAddress);
+    });
+  };
 
   return (
     <AccordionDetails>
@@ -34,6 +50,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
       </Box>
       <TabPanel value={tabValue} index={0}>
         <DepositInput
+          onDeposit={handleDeposit}
           depositToken={depositToken}
           depositAddress={depositAddress}
           label="Amount of AURA to convert"

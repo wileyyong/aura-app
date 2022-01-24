@@ -12,6 +12,7 @@ interface Contracts {
   cvxLocker: string;
   booster: string;
   registry: string;
+  cvxCRVStaking: string;
 }
 
 export enum Network {
@@ -27,6 +28,7 @@ export const ADDRESS: { [key: number]: Contracts } = {
     cvxCRV: '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7',
     cvxLocker: '0xD18140b4B819b895A3dba5442F959fA44994AF50',
     cvxRewardPool: '0xCF50b810E57Ac33B91dCF525C6ddd9881B139332',
+    cvxCRVStaking: '0x3Fe65692bfCD0e6CF84cB1E7d24108E434A7587e',
     booster: '0xF403C135812408BFbE8713b5A23a04b3D48AAE31',
     registry: '0x90E00ACe148ca3b23Ac1bC8C240C2a7Dd9c2d7f5',
   },
