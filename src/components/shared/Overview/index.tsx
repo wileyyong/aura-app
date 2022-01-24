@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 import { useUserRewards } from '../../../hooks/useUserRewards';
-import { HeaderBox } from '../../pages/Stake/HeaderBox';
+import { HeaderBox } from '../HeaderBox';
 
 export const Overview = () => {
   const userRewards = useUserRewards();

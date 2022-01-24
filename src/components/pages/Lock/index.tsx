@@ -16,27 +16,13 @@ export const Lock: FC = () => {
         <Box mb={2}>
           <Heading title="Lock Aura" />
         </Box>
-        <LockAccordion
-          highlighted
-          poolId={0}
-          symbol={'Locked AURA'}
-          apr={lockedCVXAPR}
-          share={0}
-          expanded={true}
-        />
+        <LockAccordion symbol={'Locked AURA'} apr={lockedCVXAPR} share={0} />
       </Box>
       <Box mb={4}>
         <Box mb={2}>
           <Heading title="Stake your AURA to earn auraBAL" />
         </Box>
-        <StakeAccordion
-          highlighted
-          poolId={0}
-          symbol={'AURA'}
-          apr={stakedCVXAPR}
-          share={0}
-          expanded={true}
-        />
+        <StakeAccordion symbol={'AURA'} apr={stakedCVXAPR} share={0} />
       </Box>
     </Box>
   );

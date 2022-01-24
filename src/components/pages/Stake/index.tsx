@@ -16,14 +16,7 @@ export const Stake: FC = () => {
         <Box mb={2}>
           <Heading title="Convert BAL" />
         </Box>
-        <ConvertAccordion
-          highlighted
-          share={0}
-          poolId={0}
-          symbol={'BAL'}
-          expanded={true}
-          apr={stakedCVXCRVAPR}
-        />
+        <ConvertAccordion share={0} symbol={'BAL'} apr={stakedCVXCRVAPR} />
       </Box>
       <Box mb={4}>
         <Heading title="Stake Balancer LP Tokens" />

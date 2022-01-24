@@ -1,14 +1,19 @@
-import { useState } from 'react';
-import { Box, Tabs, Tab } from '@mui/material';
+import { FC, useState } from 'react';
+import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
 import { DepositInput } from '../DepositInput';
-import { AccordionInput, AccordionItemProps } from '../AccordionInput';
+import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { ADDRESS } from '../../../constants';
 import { useChainId } from '../../../context/AppProvider';
 
-interface LockAccordionProps extends Omit<AccordionItemProps, 'details'> {}
+interface Props {
+  symbol: string;
+  apr?: { total: number; [key: string]: number };
+  tvl?: number;
+  share?: number;
+}
 
-export const LockAccordion = (props: LockAccordionProps) => {
+const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   const chainId = useChainId();
   const [tabValue, setTabValue] = useState(0);
 
@@ -18,29 +23,59 @@ export const LockAccordion = (props: LockAccordionProps) => {
   const cvxLocker = ADDRESS[chainId].cvxLocker;
 
   return (
+    <AccordionDetails>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+          <Tab label="Lock" />
+          <Tab label="Info" />
+        </Tabs>
+      </Box>
+      <TabPanel value={tabValue} index={0}>
+        <DepositInput
+          depositToken={cvxAddress}
+          depositAddress={cvxLocker}
+          label={`Amount of ${props.symbol} to lock`}
+          buttonLabel={`Lock ${props.symbol}`}
+        />
+      </TabPanel>
+      <TabPanel value={tabValue} index={2}>
+        Info...
+      </TabPanel>
+    </AccordionDetails>
+  );
+};
+
+export const LockAccordion: FC<Props> = ({ ...props }) => {
+  const { symbol, apr, share } = props;
+  const handleInfoClick = () => {};
+
+  return (
     <AccordionInput
       {...props}
-      details={
-        <>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
-              <Tab label="Lock" />
-              <Tab label="Info" />
-            </Tabs>
-          </Box>
-          <TabPanel value={tabValue} index={0}>
-            <DepositInput
-              depositToken={cvxAddress}
-              depositAddress={cvxLocker}
-              label={`Amount of ${props.symbol} to lock`}
-              buttonLabel={`Lock ${props.symbol}`}
-            />
-          </TabPanel>
-          <TabPanel value={tabValue} index={2}>
-            Info...
-          </TabPanel>
-        </>
-      }
-    />
+      showArrowIcon={false}
+      symbol={symbol}
+      highlighted
+      expanded
+      items={[
+        {
+          key: 'apr',
+          title: 'vAPR',
+          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          onInfoClick: handleInfoClick,
+        },
+        {
+          key: 'my-stake',
+          title: 'My Stake',
+          value: `Share: ${share && (share * 100).toFixed(2)}%`,
+        },
+        {
+          key: 'tvl',
+          title: 'TVL',
+          value: `Share: ${share && (share * 100).toFixed(2)}%`,
+        },
+      ]}
+    >
+      <AccordionInputDetails {...props} />
+    </AccordionInput>
   );
 };

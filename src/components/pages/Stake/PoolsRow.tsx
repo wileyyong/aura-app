@@ -1,7 +1,7 @@
 import React from 'react';
 import usePoolApr from '../../../hooks/usePoolApr';
 import { Pool } from '../../../hooks/usePoolInfo';
-import { StakeBalLpAccordion } from '../../shared/AccordionInput/StakeBalLp';
+import { StakeLPAccordion } from '../../shared/AccordionInput/StakeLP';
 
 interface PoolsRowProps {
   expanded: boolean;
@@ -10,22 +10,12 @@ interface PoolsRowProps {
 }
 
 export const PoolsRow = ({ expanded, onChange, pool }: PoolsRowProps) => {
-  const { symbol, poolId } = pool;
+  const { symbol } = pool;
 
   const { data: apr } = usePoolApr(pool);
 
   const share =
     Number(pool.tokenTotalSupply.toString()) / Number(pool.lptokenTotalSupply.toString());
 
-  return (
-    <StakeBalLpAccordion
-      pool={pool}
-      expanded={expanded}
-      poolId={poolId}
-      symbol={symbol}
-      apr={apr}
-      share={share}
-      onChange={onChange}
-    />
-  );
+  return <StakeLPAccordion pool={pool} symbol={symbol} apr={apr} share={share} />;
 };

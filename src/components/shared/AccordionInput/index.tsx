@@ -1,28 +1,34 @@
-import { MouseEvent, useState } from 'react';
+import { FC, MouseEvent, useState } from 'react';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import {
-  Accordion,
-  Grid,
   AccordionSummary,
   Typography,
-  AccordionDetails,
-  styled,
   Stack,
+  Button,
+  Accordion,
+  Grid,
+  styled,
 } from '@mui/material';
-import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
-import { ModalPool } from '../ModalPool';
 import { TokenIcon } from '../TokenIcon';
+import { ModalPool } from '../ModalPool';
 
 export interface AccordionItemProps {
-  details: any;
-  poolId: number;
   symbol: string;
   expanded?: boolean;
   onChange?: any;
-  apr?: { total: number; [key: string]: number };
-  tvl?: number;
-  share?: number;
   highlighted?: boolean;
+  showArrowIcon?: boolean;
+  items: {
+    key: string;
+    title?: string;
+    value?: string;
+    onInfoClick?: () => void;
+    button?: {
+      title: string;
+      onClick: () => void;
+    };
+  }[];
 }
 
 const Info = styled(InfoIcon)`
@@ -48,34 +54,44 @@ const StyledAccordion = styled(Accordion)<{ highlighted: boolean }>`
   }
   & .MuiAccordionSummary-expandIconWrapper {
     transform: rotate(90deg);
+    svg {
+      fill: ${({ theme, highlighted }) =>
+        highlighted ? theme.palette.background.default : '#000'};
+    }
   }
   & .MuiAccordionSummary-expandIconWrapper.Mui-expanded {
     transform: rotate(270deg);
   }
 `;
 
-export const AccordionInput = ({
-  symbol,
-  poolId,
-  share,
-  apr,
+export const AccordionInput: FC<AccordionItemProps> = ({
   expanded,
   onChange,
-  details,
   highlighted = false,
-}: AccordionItemProps) => {
+  children,
+  symbol,
+  items,
+  showArrowIcon = true,
+}) => {
   const [infoModalOpen, setInfoModalOpen] = useState(false);
 
   const handleOpen = () => setInfoModalOpen(true);
+
   const handleClose = () => setInfoModalOpen(false);
 
-  const handleInfoClick = (event?: MouseEvent<SVGSVGElement>) => {
+  const handleInfoClick = (event?: MouseEvent<SVGSVGElement>, action?: () => void) => {
     event?.stopPropagation();
     handleOpen();
+    action?.();
+  };
+
+  const handleButtonClick = (event?: MouseEvent<HTMLButtonElement>, action?: () => void) => {
+    event?.stopPropagation();
+    action?.();
   };
 
   return (
-    <Grid container direction="row" key={poolId} sx={{ my: 0.5 }}>
+    <Grid container direction="row" key={symbol} sx={{ my: 0.5 }}>
       <StyledAccordion
         highlighted={highlighted}
         expanded={expanded}
@@ -85,7 +101,7 @@ export const AccordionInput = ({
         sx={{ width: '100%' }}
       >
         <AccordionSummary
-          expandIcon={onChange && <ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+          expandIcon={showArrowIcon && <ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
         >
           <Grid container spacing={1} alignItems="center">
             <Grid container item xs={4} direction="row" alignItems={'center'}>
@@ -97,25 +113,30 @@ export const AccordionInput = ({
               </Grid>
             </Grid>
             <Grid item container xs={8}>
-              <Grid item xs={4}>
-                {highlighted && <Typography variant="body2">vAPR</Typography>}
-                <Stack direction="row">
-                  <Typography>{apr && (apr.total * 100).toFixed(2)}%</Typography>
-                  <Info onClick={handleInfoClick} />
-                </Stack>
-              </Grid>
-              <Grid item xs={4}>
-                {highlighted && <Typography variant="body2">My Stake</Typography>}
-                <Typography>Share: {share && (share * 100).toFixed(2)}%</Typography>
-              </Grid>
-              <Grid item xs={4}>
-                {highlighted && <Typography textAlign="left">TVL</Typography>}
-                <Typography variant="body2">Share: {share && (share * 100).toFixed(2)}%</Typography>
-              </Grid>
+              {items.map(item => (
+                <Grid item xs={4} key={item.key}>
+                  {item?.title && <Typography variant="body2">{item?.title}</Typography>}
+                  <Stack direction="row">
+                    <Typography>{item?.value}</Typography>
+                    {!!item?.onInfoClick && (
+                      <Info onClick={e => handleInfoClick(e, item.onInfoClick)} />
+                    )}
+                    {!!item?.button && (
+                      <Button
+                        variant={'contained'}
+                        sx={{ width: '100%', mr: 4 }}
+                        onClick={e => handleButtonClick(e, item?.button?.onClick)}
+                      >
+                        {item.button.title}
+                      </Button>
+                    )}
+                  </Stack>
+                </Grid>
+              ))}
             </Grid>
           </Grid>
         </AccordionSummary>
-        <AccordionDetails>{details}</AccordionDetails>
+        {children}
       </StyledAccordion>
       <ModalPool open={infoModalOpen} onClose={handleClose} />
     </Grid>
