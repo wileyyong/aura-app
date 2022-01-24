@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Button } from '@mui/material';
-import { BigNumberish, ethers } from 'ethers';
-import { formatEther } from 'ethers/lib/utils';
+import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { formatEther, parseEther } from 'ethers/lib/utils';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Input } from '../Input';
@@ -23,6 +23,7 @@ interface FormValues {
 
 export const DepositInput = ({
   label,
+  onDeposit,
   buttonLabel,
   depositToken,
   depositAddress,
@@ -43,7 +44,8 @@ export const DepositInput = ({
   });
 
   const submit: SubmitHandler<FormValues> = values => {
-    console.log(values);
+    const amount = parseEther(values.amount.toString());
+    onDeposit(amount);
   };
 
   const handleMaxClick = () => {
