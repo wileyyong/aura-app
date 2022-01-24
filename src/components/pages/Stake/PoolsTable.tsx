@@ -5,7 +5,7 @@ import { PoolsRow } from './PoolsRow';
 import Skeleton from 'react-loading-skeleton';
 
 const HeaderTitle = styled(Typography)`
-  font-weight: 600;
+  font-weight: 500;
   font-size: 0.875rem;
 `;
 
@@ -26,7 +26,7 @@ export const PoolsTable: FC = () => {
           </Grid>
           <Grid item container xs={8}>
             <Grid item xs={4}>
-              <HeaderTitle>vApr</HeaderTitle>
+              <HeaderTitle>vAPR</HeaderTitle>
             </Grid>
             <Grid item xs={4}>
               <HeaderTitle>My Deposits</HeaderTitle>

@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { LockAccordion } from '../../shared/AccordionInput/Lock';
 import { StakeAccordion } from '../../shared/AccordionInput/Stake';
 import { useLockedCVXAPR } from '../../../hooks/useLockedCVXAPR';
 import { useStakedCVXAPR } from '../../../hooks/useStakedCVXAPR';
+import { Heading } from '../../shared/Heading';
 
 export const Lock: FC = () => {
   const stakedCVXAPR = useStakedCVXAPR();
@@ -13,7 +14,7 @@ export const Lock: FC = () => {
     <Box>
       <Box mb={4}>
         <Box mb={2}>
-          <Typography variant="h6">Lock AURA</Typography>
+          <Heading title="Lock Aura" />
         </Box>
         <LockAccordion
           highlighted
@@ -26,7 +27,7 @@ export const Lock: FC = () => {
       </Box>
       <Box mb={4}>
         <Box mb={2}>
-          <Typography variant="h6">Stake your AURA to earn auraBAL</Typography>
+          <Heading title="Stake your AURA to earn auraBAL" />
         </Box>
         <StakeAccordion
           highlighted

@@ -1,10 +1,6 @@
 import React, { FC, useState } from 'react';
 
-import {
-  useAddress,
-  useConnect,
-  useChainId,
-} from '../../../context/AppProvider';
+import { useAddress, useConnect, useChainId } from '../../../context/AppProvider';
 import { mediumAddress } from '../../../utils';
 import { Link as RouterLink } from 'react-router-dom';
 import { ModalAccount } from '../ModalAccount';
@@ -30,7 +26,7 @@ export const Header: FC = () => {
       direction="row"
       justifyContent="space-between"
       alignItems="center"
-      sx={{ mb: 4, py: 2 }}
+      sx={{ mb: 2, py: 2 }}
     >
       <Grid item>
         <Link component={RouterLink} to="/">

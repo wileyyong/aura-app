@@ -1,32 +1,20 @@
 import React, { FC } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { PoolsTable } from './PoolsTable';
 import { ConvertAccordion } from '../../shared/AccordionInput/Convert';
 import useStakedCVXCRVAPR from '../../../hooks/useStakedCVXCRVAPR';
-import { HeaderBox } from './HeaderBox';
-import { useUserRewards } from '../../../hooks/useUserRewards';
+import { Heading } from '../../shared/Heading';
+import { Overview } from '../../shared/Overview';
 
 export const Stake: FC = () => {
-  const userRewards = useUserRewards();
-
   const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
 
   return (
     <Box>
-      <Grid container direction="row" justifyContent="center" spacing={2}>
-        <Grid item>
-          <HeaderBox
-            title="Total Claimable"
-            value={`$${(userRewards?.totalUSD ?? 0).toFixed(2)}`}
-          />
-        </Grid>
-        <Grid item>
-          <HeaderBox title="Total Deposits" value="$0" />
-        </Grid>
-      </Grid>
+      <Overview />
       <Box my={4}>
         <Box mb={2}>
-          <Typography variant="h6">Convert BAL</Typography>
+          <Heading title="Convert BAL" />
         </Box>
         <ConvertAccordion
           highlighted
@@ -38,7 +26,7 @@ export const Stake: FC = () => {
         />
       </Box>
       <Box mb={4}>
-        <Typography variant="h6">Stake Balancer LP Tokens</Typography>
+        <Heading title="Stake Balancer LP Tokens" />
         <PoolsTable />
       </Box>
     </Box>

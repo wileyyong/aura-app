@@ -12,7 +12,6 @@ import { DataProvider } from '../context/DataProvider';
 import { Stake } from './pages/Stake';
 import { Lock } from './pages/Lock';
 import { Container } from '@mui/material';
-
 import { ContractProvider } from '../context/ContractProvider';
 
 const Routes: FC = () => {

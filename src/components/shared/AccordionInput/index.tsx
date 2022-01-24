@@ -98,7 +98,7 @@ export const AccordionInput = ({
             </Grid>
             <Grid item container xs={8}>
               <Grid item xs={4}>
-                {highlighted && <Typography variant="body2">vARP</Typography>}
+                {highlighted && <Typography variant="body2">vAPR</Typography>}
                 <Stack direction="row">
                   <Typography>{apr && (apr.total * 100).toFixed(2)}%</Typography>
                   <Info onClick={handleInfoClick} />
