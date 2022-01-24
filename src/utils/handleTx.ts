@@ -7,6 +7,7 @@ export const handleTx = async (fn: () => Promise<ContractTransaction>) => {
     await tx.wait();
     alert('success');
   } catch (error) {
+    console.log(error);
     alert('failure');
   }
 };

@@ -1,7 +1,7 @@
 import { BigNumberish } from 'ethers';
 import { useCallback, useMemo } from 'react';
 import useSWR from 'swr';
-import { useProvider } from '../context/AppProvider';
+import { useSigner } from '../context/AppProvider';
 import { Erc20, Erc20__factory } from '../typechain';
 import { handleTx } from '../utils/handleTx';
 
@@ -14,13 +14,13 @@ export const useAllowance = (
   owner: string | undefined,
   spender: string | undefined,
 ) => {
-  const provider = useProvider();
+  const signer = useSigner();
 
-  const shouldFetch = !!provider && !!spender && tokenAddress;
+  const shouldFetch = !!signer && !!spender && tokenAddress;
 
   const token = useMemo(
-    () => provider && tokenAddress && Erc20__factory.connect(tokenAddress, provider),
-    [provider, tokenAddress],
+    () => signer && tokenAddress && Erc20__factory.connect(tokenAddress, signer),
+    [signer, tokenAddress],
   );
 
   const approve = useCallback(
