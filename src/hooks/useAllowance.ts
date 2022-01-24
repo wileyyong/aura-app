@@ -1,7 +1,9 @@
-import { useMemo } from 'react';
+import { BigNumberish } from 'ethers';
+import { useCallback, useMemo } from 'react';
 import useSWR from 'swr';
 import { useProvider } from '../context/AppProvider';
 import { Erc20, Erc20__factory } from '../typechain';
+import { handleTx } from '../utils/handleTx';
 
 function fetchAllowance(_: string, token: Erc20, owner: string, spender: string) {
   return token.allowance(owner, spender);
@@ -21,5 +23,14 @@ export const useAllowance = (
     [provider, tokenAddress],
   );
 
-  return useSWR(shouldFetch ? ['balanceOf', token, owner, spender] : null, fetchAllowance);
+  const approve = useCallback(
+    (spender: string, amount: BigNumberish) => {
+      return token && handleTx(() => token.approve(spender, amount));
+    },
+    [token],
+  );
+
+  const obj = useSWR(shouldFetch ? ['balanceOf', token, owner, spender] : null, fetchAllowance);
+
+  return { ...obj, approve };
 };
