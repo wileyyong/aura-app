@@ -10,7 +10,15 @@ const defaults = createTheme({
   },
 });
 
-export const theme = createTheme(defaults, {
+export const theme = createTheme({
+  ...defaults,
+  typography: {
+    button: {
+      textTransform: 'none',
+      fontWeight: 600,
+    },
+  },
+
   palette: {
     primary: {
       main: blue[500],
@@ -59,7 +67,6 @@ export const theme = createTheme(defaults, {
         },
       },
     },
-
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
