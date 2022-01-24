@@ -18,7 +18,7 @@ interface Contracts {
 export enum Network {
   EthereumMainnet = 1,
   Ropsten = 3,
-  Local = 1337,
+  Local = 31337,
 }
 
 const mainnnetContracts: Contracts = {

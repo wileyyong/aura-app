@@ -122,6 +122,7 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <WithdrawInput
+          stakeAddress={pool.crvRewards}
           label={`Amount to ${symbol} to unstake and withdraw`}
           buttonLabel="Unstake & Withdraw"
         />

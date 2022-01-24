@@ -57,7 +57,11 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <WithdrawInput label={`Amount of ${props.symbol} to withdraw`} buttonLabel="Unstake" />
+        <WithdrawInput
+          stakeAddress={depositAddress}
+          label={`Amount of ${props.symbol} to withdraw`}
+          buttonLabel="Unstake"
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         Info...

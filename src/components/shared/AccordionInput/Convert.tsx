@@ -8,7 +8,7 @@ import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { useChainId, useSigner } from '../../../context/AppProvider';
 import { ADDRESS } from '../../../constants';
-import { CrvDepositor__factory } from '../../../typechain';
+import { CrvDepositor__factory, CvxRewardPool__factory } from '../../../typechain';
 import { handleTx } from '../../../utils/handleTx';
 
 interface Props {
@@ -39,6 +39,16 @@ const AccordionInputDetails: FC<Props> = () => {
     });
   };
 
+  const handleWithdraw = (amount: BigNumberish) => {
+    if (!signer) return;
+
+    const rewardsPool = CvxRewardPool__factory.connect(stakeAddress, signer);
+
+    handleTx(() => {
+      return rewardsPool.withdraw(amount, true);
+    });
+  };
+
   return (
     <AccordionDetails>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -58,7 +68,12 @@ const AccordionInputDetails: FC<Props> = () => {
         />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <WithdrawInput label="Amount of auraBAL to withdraw" buttonLabel="Unstake auraBAL" />
+        <WithdrawInput
+          stakeAddress={stakeAddress}
+          onWithdraw={handleWithdraw}
+          label="Amount of auraBAL to withdraw"
+          buttonLabel="Unstake auraBAL"
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         Info...
