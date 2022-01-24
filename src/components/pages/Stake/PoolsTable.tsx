@@ -20,11 +20,7 @@ export const PoolsTable: FC = () => {
   return (
     <>
       <Grid container>
-        <Grid
-          container
-          spacing={1}
-          sx={{ px: 2, my: 1, width: 'calc(100% - 10px)' }}
-        >
+        <Grid container spacing={1} sx={{ px: 2, my: 1, width: 'calc(100% - 10px)' }}>
           <Grid item xs={4}>
             <HeaderTitle>Pool Name</HeaderTitle>
           </Grid>

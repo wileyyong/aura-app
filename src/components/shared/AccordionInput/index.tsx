@@ -11,6 +11,7 @@ import {
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import InfoIcon from '@mui/icons-material/Info';
 import { ModalPool } from '../ModalPool';
+import { TokenIcon } from '../TokenIcon';
 
 export interface AccordionItemProps {
   details: any;
@@ -88,8 +89,13 @@ export const AccordionInput = ({
           expandIcon={onChange && <ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
         >
           <Grid container spacing={1} alignItems="center">
-            <Grid item xs={4}>
-              <Typography>{symbol}</Typography>
+            <Grid container item xs={4} direction="row" alignItems={'center'}>
+              <Grid item sx={{ mr: 1 }}>
+                <TokenIcon symbol={'BAL'} />
+              </Grid>
+              <Grid item>
+                <Typography>{symbol}</Typography>
+              </Grid>
             </Grid>
             <Grid item container xs={8}>
               <Grid item xs={4}>
