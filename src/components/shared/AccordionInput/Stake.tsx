@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
@@ -27,14 +27,24 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   const cvxAddress = ADDRESS[chainId].cvx;
   const depositAddress = ADDRESS[chainId].cvxRewardPool;
 
+  const cvxRewardPool = useMemo(
+    () => signer && CvxRewardPool__factory.connect(depositAddress, signer),
+    [depositAddress, signer],
+  );
+
   // Stake CVX into cvx reward contract
   const handleDeposit = (amount: BigNumberish) => {
-    if (!signer) return;
-
-    const cvxRewardPool = CvxRewardPool__factory.connect(depositAddress, signer);
-
+    if (!cvxRewardPool) return;
     handleTx(() => {
       return cvxRewardPool.stake(amount);
+    });
+  };
+  
+  // Withdraw staked CVX from reward contract
+  const handleWithdraw = (amount: BigNumberish) => {
+    if (!cvxRewardPool) return;
+    handleTx(() => {
+      return cvxRewardPool.withdraw(amount, true);
     });
   };
 
@@ -58,6 +68,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
         <WithdrawInput
+          onWithdraw={handleWithdraw}
           stakeAddress={depositAddress}
           label={`Amount of ${props.symbol} to withdraw`}
           buttonLabel="Unstake"
