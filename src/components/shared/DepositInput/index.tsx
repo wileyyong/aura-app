@@ -18,7 +18,7 @@ export interface DepositInputProps {
 }
 
 interface FormValues {
-  amount: number;
+  amount: string;
 }
 
 export const DepositInput = ({
@@ -44,12 +44,12 @@ export const DepositInput = ({
   });
 
   const submit: SubmitHandler<FormValues> = values => {
-    const amount = parseEther(values.amount.toString());
+    const amount = parseEther(values.amount);
     onDeposit && onDeposit(amount);
   };
 
   const handleMaxClick = () => {
-    const value = Number(formatEther(balance || 0));
+    const value = formatEther(balance || 0);
 
     setValue('amount', value, {
       shouldDirty: true,
