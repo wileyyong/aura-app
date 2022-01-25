@@ -90,7 +90,7 @@ async function fetchPools(
   if (!registryResp) return;
 
   const data: Pool[] = boosterResp.map((x, i) => ({
-    poolId: i,
+    poolId: Number(poolIds[i]),
     symbol: symbolResp[i]?.[0]?.[0] as string,
     lptoken: x.lptoken,
     token: x.token,
