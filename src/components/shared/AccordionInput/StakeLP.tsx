@@ -1,15 +1,5 @@
-import {
-  Box,
-  Tabs,
-  Tab,
-  FormControlLabel,
-  FormGroup,
-  Stack,
-  Switch,
-  Collapse,
-  AccordionDetails,
-} from '@mui/material';
-import { useState, FC } from 'react';
+import { Box, Tabs, Tab, AccordionDetails, Stack } from '@mui/material';
+import { useState, useMemo, FC } from 'react';
 import { BigNumberish } from 'ethers';
 
 import { TabPanel } from '../TabPanel';
@@ -34,43 +24,43 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
   const chainId = useChainId();
   const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
-  const [showAdvanced, setShowAdvanced] = useState(false);
-
-  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShowAdvanced(event.target.checked);
-  };
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
-  const boosterContract = ADDRESS[chainId].booster;
+  const boosterAddress = ADDRESS[chainId].booster;
+
+  const booster = useMemo(
+    () => signer && Booster__factory.connect(boosterAddress, signer),
+    [boosterAddress, signer],
+  );
 
   const { symbol } = props;
 
-  const depositStake = (stake: boolean) => (amount: BigNumberish) => {
-    if (!signer) return;
-
-    const contract = Booster__factory.connect(boosterContract, signer);
-
+  // Deposit pool lp token into booster contract
+  // then stake pool token into rewards contract
+  const handleDepositStake = (amount: BigNumberish) => {
+    if (!booster) return;
     handleTx(() => {
-      return contract.deposit(pool.poolId, amount, stake);
+      const stake = true;
+      return booster.deposit(pool.poolId, amount, stake);
     });
   };
 
-  // Deposit pool lp token into booster contract
-  // then stake pool token into rewards contract
-  const handleDepositStake = depositStake(true);
-
-  // Deposit pool lp token into booster contract
-  const handleDeposit = depositStake(false);
-
-  // Stake pool token into rewards contract
-  const handleStake = (amount: BigNumberish) => {
+  // Unstake from the rewards pool
+  const handleUnstake = (amount: BigNumberish) => {
     if (!signer) return;
-
-    const contract = CvxRewardPool__factory.connect(pool.crvRewards, signer);
-
-    handleTx(() => {
-      return contract.stake(amount);
+    const rewards = CvxRewardPool__factory.connect(pool.crvRewards, signer);
+    handleTx(async () => {
+      const claim = true;
+      return rewards.withdraw(amount, claim);
+    });
+  };
+  
+  // Withdraw LP tokens
+  const handleWithdraw = (amount: BigNumberish) => {
+    if (!booster) return;
+    handleTx(async () => {
+      return booster.withdraw(pool.poolId, amount);
     });
   };
 
@@ -84,48 +74,29 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
         </Tabs>
       </Box>
       <TabPanel value={tabValue} index={0}>
-        <Stack spacing={3}>
-          <Box ml="auto">
-            <FormGroup>
-              <FormControlLabel
-                control={<Switch onChange={handleToggleChange} />}
-                label="Advanced"
-              />
-            </FormGroup>
-          </Box>
-          <DepositInput
-            onDeposit={handleDepositStake}
-            depositToken={pool.lptoken}
-            depositAddress={boosterContract}
-            buttonLabel="Deposit & Stake"
-            label={`Amount of ${symbol} to deposit and stake`}
-          />
-          <Collapse in={showAdvanced}>
-            <Stack spacing={3}>
-              <DepositInput
-                onDeposit={handleDeposit}
-                depositToken={pool.lptoken}
-                depositAddress={boosterContract}
-                label={`Amount of ${symbol} to deposit`}
-                buttonLabel="Deposit"
-              />
-              <DepositInput
-                onDeposit={handleStake}
-                depositToken={pool.token}
-                depositAddress={pool.crvRewards}
-                label={`Amount of ${symbol} to stake`}
-                buttonLabel="Stake"
-              />
-            </Stack>
-          </Collapse>
-        </Stack>
+        <DepositInput
+          onDeposit={handleDepositStake}
+          depositToken={pool.lptoken}
+          depositAddress={boosterAddress}
+          buttonLabel="Deposit & Stake"
+          label={`Amount of ${symbol} to deposit and stake`}
+        />
       </TabPanel>
       <TabPanel value={tabValue} index={1}>
-        <WithdrawInput
-          stakeAddress={pool.crvRewards}
-          label={`Amount to ${symbol} to unstake and withdraw`}
-          buttonLabel="Unstake & Withdraw"
-        />
+        <Stack spacing={2}>
+          <WithdrawInput
+            onWithdraw={handleUnstake}
+            stakeAddress={pool.crvRewards}
+            label={`Amount to ${symbol} to unstake`}
+            buttonLabel="Unstake"
+          />
+          <WithdrawInput
+            onWithdraw={handleWithdraw}
+            stakeAddress={pool.token}
+            label={`Amount to ${symbol} to withdraw`}
+            buttonLabel="Withdraw"
+          />
+        </Stack>
       </TabPanel>
       <TabPanel value={tabValue} index={2}>
         Info...
