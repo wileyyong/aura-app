@@ -11,7 +11,6 @@ interface State {
 }
 
 export const useUserRewards = () => {
-  const chainId = useChainId();
   const contracts = useContracts();
   const address = useAddress();
   const prices = useTokenPrices();
@@ -37,7 +36,7 @@ export const useUserRewards = () => {
 
       setValue({ rewards, totalUSD });
     })();
-  }, [chainId, contracts, prices, address]);
+  }, [contracts, prices, address]);
 
   return useMemo(() => value, [value]);
 };

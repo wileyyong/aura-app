@@ -1,17 +1,16 @@
 import useSWR from 'swr';
 import { useMemo } from 'react';
-import { ADDRESS } from '../constants';
 
 import useMulticall, { Call } from './useMulticall';
 import { Cvx__factory } from '../typechain/factories/Cvx__factory';
-import { useChainId } from '../context/AppProvider';
+import { useAddresses } from './useAddresses';
 
-async function fetcher(_: string, chainId: number, multicall: (calls: Call[]) => Promise<any>) {
+async function fetcher(_: string, cvxAddress: string, multicall: (calls: Call[]) => Promise<any>) {
   const calls = [
-    { address: ADDRESS[chainId].cvx, name: 'reductionPerCliff', params: [] },
-    { address: ADDRESS[chainId].cvx, name: 'totalCliffs', params: [] },
-    { address: ADDRESS[chainId].cvx, name: 'totalSupply', params: [] },
-    { address: ADDRESS[chainId].cvx, name: 'maxSupply', params: [] },
+    { address: cvxAddress, name: 'reductionPerCliff', params: [] },
+    { address: cvxAddress, name: 'totalCliffs', params: [] },
+    { address: cvxAddress, name: 'totalSupply', params: [] },
+    { address: cvxAddress, name: 'maxSupply', params: [] },
   ];
 
   const resp = await multicall(calls);
@@ -25,10 +24,12 @@ async function fetcher(_: string, chainId: number, multicall: (calls: Call[]) =>
 }
 
 export default function useCVXInfo() {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const itf = useMemo(() => Cvx__factory.createInterface(), []);
+
+  const cvxAddress = addresses.cvx;
 
   const multicall = useMulticall(itf);
 
-  return useSWR(['cvxInfo', chainId, multicall], fetcher);
+  return useSWR(['cvxInfo', cvxAddress, multicall], fetcher);
 }

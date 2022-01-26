@@ -1,5 +1,5 @@
 import React, { FC, createContext, useEffect, useMemo, useContext, useState } from 'react';
-import { ADDRESS } from '../constants';
+import { useAddresses } from '../hooks/useAddresses';
 import { CrvDepositor, CvxLocker, CvxLocker__factory } from '../typechain';
 import { CvxRewardPool } from '../typechain/CvxRewardPool';
 import { CrvDepositor__factory } from '../typechain/factories/CrvDepositor__factory';
@@ -16,16 +16,18 @@ const stateCtx = createContext<State>(null as never);
 
 export const ContractProvider: FC = ({ children }) => {
   const provider = useProvider();
-  const chainId = useChainId();
+  const addresses = useAddresses();
 
   const [state, setState] = useState<State>({});
 
   useEffect(() => {
     if (!provider) return;
 
-    const { crvDepositor: crvDepositerAddress } = ADDRESS[chainId];
-    const { cvxLocker: cvxLockerAddress } = ADDRESS[chainId];
-    const { cvxRewardPool: cvxRewardPoolAddress } = ADDRESS[chainId];
+    const {
+      crvDepositor: crvDepositerAddress,
+      cvxLocker: cvxLockerAddress,
+      cvxRewardPool: cvxRewardPoolAddress,
+    } = addresses;
 
     const crvDepositor = CrvDepositor__factory.connect(crvDepositerAddress, provider);
     const cvxLocker = CvxLocker__factory.connect(cvxLockerAddress, provider);
@@ -36,7 +38,7 @@ export const ContractProvider: FC = ({ children }) => {
       cvxLocker,
       cvxRewardPool,
     });
-  }, [chainId, provider]);
+  }, [addresses, provider]);
 
   return <stateCtx.Provider value={useMemo(() => state, [state])}>{children}</stateCtx.Provider>;
 };

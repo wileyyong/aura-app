@@ -10,7 +10,9 @@ import React, {
 import { Web3Provider, JsonRpcProvider } from '@ethersproject/providers';
 
 import { Signer } from 'ethers';
-import { DEFAULT_CHAIN_ID, RPC_URLS } from '../constants';
+import { DEFAULT_CHAIN_ID, RPC_URLS, supportedChainIds } from '../constants';
+
+const defaultRpcProvider = new JsonRpcProvider(RPC_URLS[DEFAULT_CHAIN_ID]);
 
 async function lazyLaunchModal() {
   const [WalletConnectProvider, Web3Modal] = await Promise.all([
@@ -68,7 +70,7 @@ export const AppProvider: FC = ({ children }) => {
   const [chainId, setChainId] = useState<number>(DEFAULT_CHAIN_ID);
   const [web3ModalProvider, setWeb3ModalProvider] = useState<any | null>(null);
   const [provider, setProvider] = useState<Web3Provider | JsonRpcProvider | undefined>(
-    new JsonRpcProvider(RPC_URLS[DEFAULT_CHAIN_ID]),
+    defaultRpcProvider,
   );
 
   const handleAddressChange = useCallback((address: string[]) => setAddress(address?.[0]), []);
@@ -81,7 +83,7 @@ export const AppProvider: FC = ({ children }) => {
   const connect = useCallback(async () => {
     const provider = await lazyLaunchModal();
     setWeb3ModalProvider(provider);
-    setProvider(new Web3Provider(provider));
+    setProvider(new Web3Provider(provider, 'any'));
     setAddress(provider?.selectedAddress);
   }, []);
 
@@ -131,7 +133,16 @@ export const AppProvider: FC = ({ children }) => {
 
 export const useChainId = (): State['chainId'] => useContext(context).chainId;
 
-export const useProvider = (): State['provider'] => useContext(context).provider;
+export const useProvider = (): State['provider'] => {
+  const chainId = useChainId();
+  const provider = useContext(context).provider;
+  return useMemo(() => {
+    if (supportedChainIds.includes(chainId)) {
+      return provider;
+    }
+    return defaultRpcProvider;
+  }, [chainId, provider]);
+};
 
 export const useConnect = (): State['connect'] => useContext(context).connect;
 

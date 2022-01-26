@@ -6,9 +6,9 @@ import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
-import { useChainId, useSigner } from '../../../context/AppProvider';
-import { ADDRESS } from '../../../constants';
+import { useSigner } from '../../../context/AppProvider';
 import { CrvDepositor__factory, CvxRewardPool__factory } from '../../../typechain';
+import { useAddresses } from '../../../hooks/useAddresses';
 
 interface Props {
   symbol: string;
@@ -18,15 +18,15 @@ interface Props {
 }
 
 const AccordionInputDetails: FC<Props> = () => {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
-  const depositToken = ADDRESS[chainId].crv;
-  const depositAddress = ADDRESS[chainId].crvDepositor;
-  const stakeAddress = ADDRESS[chainId].cvxCRVStaking;
+  const depositToken = addresses.crv;
+  const depositAddress = addresses.crvDepositor;
+  const stakeAddress = addresses.cvxCRVStaking;
 
   const handleDeposit = (amount: BigNumberish) => {
     if (!signer) return;

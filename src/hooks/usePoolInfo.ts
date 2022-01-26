@@ -2,9 +2,8 @@ import useSWR from 'swr';
 import { BigNumber } from 'ethers';
 
 import { Booster__factory, Erc20__factory, Registry__factory } from '../typechain';
-import { ADDRESS } from '../constants';
-import { useChainId } from '../context/AppProvider';
 import useMulticall, { Call } from './useMulticall';
+import { useAddresses } from './useAddresses';
 
 const boosterItf = Booster__factory.createInterface();
 const registryItf = Registry__factory.createInterface();
@@ -26,7 +25,8 @@ export interface Pool {
 
 async function fetchPools(
   _: string,
-  chainId: number,
+  boosterAddress: string,
+  registryAddress: string,
   poolIds: string[],
   boosterMulticall: (call: Call[] | Array<Call[]>) => Promise<
     | undefined
@@ -44,9 +44,6 @@ async function fetchPools(
   ) => Promise<undefined | [string][][] | [BigNumber][][]>,
   registryMulticall: (call: Call[] | Array<Call[]>) => Promise<undefined | [string][]>,
 ) {
-  const boosterAddress = ADDRESS[chainId].booster;
-  const registryAddress = ADDRESS[chainId].registry;
-
   const poolInfoCalls = poolIds.map(pid => ({
     address: boosterAddress,
     name: 'poolInfo',
@@ -107,14 +104,25 @@ async function fetchPools(
 }
 
 export default function usePoolInfo(poolIds: string[]) {
-  const chainId = useChainId();
+  const addresses = useAddresses();
+
+  const boosterAddress = addresses.booster;
+  const registryAddress = addresses.registry;
 
   const boosterMulticall = useMulticall(boosterItf);
   const erc20Multicall = useMulticall(erc20Itf);
   const registryMulticall = useMulticall(registryItf);
 
   return useSWR(
-    ['poolInfo', chainId, poolIds, boosterMulticall, erc20Multicall, registryMulticall],
+    [
+      'poolInfo',
+      boosterAddress,
+      registryAddress,
+      poolIds,
+      boosterMulticall,
+      erc20Multicall,
+      registryMulticall,
+    ],
     fetchPools,
   );
 }

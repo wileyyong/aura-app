@@ -1,20 +1,19 @@
-import { ADDRESS } from '../constants';
-import { useChainId } from '../context/AppProvider';
 import { useContracts } from '../context/ContractProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
 import { useTokenPrice } from '../context/DataProvider';
+import { useAddresses } from './useAddresses';
 
 // NOTE: CVX rewards address. Total supply * CVX price is TVL
 export const useStakedCVXAPR = () => {
-  const chainId = useChainId();
   const contracts = useContracts();
+  const addresses = useAddresses();
   const [apr, setApr] = useState(0);
 
   const cvxRewardPool = contracts.cvxRewardPool;
 
-  const cvxPrice = useTokenPrice(ADDRESS[chainId].cvx);
-  const crvPrice = useTokenPrice(ADDRESS[chainId].crv);
+  const cvxPrice = useTokenPrice(addresses.cvx);
+  const crvPrice = useTokenPrice(addresses.crv);
 
   useEffect(() => {
     (async () => {
@@ -38,7 +37,7 @@ export const useStakedCVXAPR = () => {
 
       setApr(apr);
     })();
-  }, [cvxRewardPool, chainId, crvPrice, cvxPrice]);
+  }, [cvxRewardPool, addresses, crvPrice, cvxPrice]);
 
   return useMemo(() => ({ total: apr }), [apr]);
 };

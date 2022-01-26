@@ -1,13 +1,13 @@
+import { BigNumberish } from 'ethers';
 import { FC, useMemo, useState } from 'react';
 import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
-import { ADDRESS } from '../../../constants';
-import { useChainId, useSigner } from '../../../context/AppProvider';
+import { useSigner } from '../../../context/AppProvider';
 import { CvxRewardPool__factory } from '../../../typechain';
-import { BigNumberish } from 'ethers';
+import { useAddresses } from '../../../hooks/useAddresses';
 
 interface Props {
   symbol: string;
@@ -17,14 +17,14 @@ interface Props {
 }
 
 const AccordionInputDetails: FC<Props> = ({ ...props }) => {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
-  const cvxAddress = ADDRESS[chainId].cvx;
-  const depositAddress = ADDRESS[chainId].cvxRewardPool;
+  const cvxAddress = addresses.cvx;
+  const depositAddress = addresses.cvxRewardPool;
 
   const cvxRewardPool = useMemo(
     () => signer && CvxRewardPool__factory.connect(depositAddress, signer),

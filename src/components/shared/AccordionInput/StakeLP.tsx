@@ -5,12 +5,11 @@ import { BigNumberish } from 'ethers';
 import { TabPanel } from '../TabPanel';
 import { DepositInput } from '../DepositInput';
 import { WithdrawInput } from '../WithdrawInput';
-import { useChainId, useSigner } from '../../../context/AppProvider';
+import { useSigner } from '../../../context/AppProvider';
 import { AccordionInput } from '../AccordionInput';
-import { ADDRESS } from '../../../constants';
 import { Pool } from '../../../hooks/usePoolInfo';
 import { Booster__factory, CvxRewardPool__factory } from '../../../typechain';
-import { handleTx } from '../../../utils/handleTx';
+import { useAddresses } from '../../../hooks/useAddresses';
 
 interface Props {
   symbol: string;
@@ -21,13 +20,13 @@ interface Props {
 }
 
 const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const signer = useSigner();
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
-  const boosterAddress = ADDRESS[chainId].booster;
+  const boosterAddress = addresses.booster;
 
   const booster = useMemo(
     () => signer && Booster__factory.connect(boosterAddress, signer),

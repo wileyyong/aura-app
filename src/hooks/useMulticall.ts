@@ -4,9 +4,10 @@ import flatten from 'lodash/flatten';
 import chunk from 'lodash/chunk';
 
 import { useChainId, useProvider } from '../context/AppProvider';
-import { ADDRESS, MAX_GAS_LIMIT } from '../constants';
+import { MAX_GAS_LIMIT } from '../constants';
 
 import { Multicall__factory } from '../typechain/factories/Multicall__factory';
+import { useAddresses } from './useAddresses';
 
 export interface Call {
   address: string;
@@ -19,6 +20,7 @@ export interface Call {
 export default function useMulticall(itf: Interface) {
   const provider = useProvider();
   const chainId = useChainId();
+  const addresses = useAddresses();
 
   return useCallback(
     async (calls: Call[] | Array<Call[]>) => {
@@ -28,7 +30,7 @@ export default function useMulticall(itf: Interface) {
 
       const callsFlat: Call[] = flatten(calls);
 
-      const multicallAddress = ADDRESS[chainId].multicall;
+      const multicallAddress = addresses.multicall;
 
       const multiCall = Multicall__factory.connect(multicallAddress, provider);
 

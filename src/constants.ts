@@ -2,7 +2,7 @@ export const DEPLOYED_ADDRESS = '';
 
 export const DEFAULT_CHAIN_ID = 1;
 
-interface Contracts {
+export interface Contracts {
   multicall: string;
   cvx: string;
   crv: string;
@@ -61,3 +61,5 @@ export const RPC_URLS: { [key: number]: string } = {
   [Network.Ropsten]: 'https://ropsten.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
   [Network.Local]: 'http://localhost:8545',
 };
+
+export const supportedChainIds = [31337, 1];

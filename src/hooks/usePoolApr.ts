@@ -11,9 +11,9 @@ import cvxMintAmount from '../fetchers/cvxMintAmount';
 import getUnderlyingCoins from '../fetchers/underlyingCoins';
 import { getAveragePrice } from '../fetchers/price';
 
-import { ADDRESS } from '../constants';
 import { BigNumber } from 'ethers';
 import { useTokenPrice } from '../context/DataProvider';
+import { useAddresses } from './useAddresses';
 
 async function fetchPoolApr(
   _: string,
@@ -21,14 +21,14 @@ async function fetchPoolApr(
   cvxInfo: { [key: string]: BigNumber },
   cvxPrice: number,
   crvPrice: number,
-  chainId: number,
+  registryAddress: string,
   provider: Web3Provider,
 ) {
   const [rewardRate, curveLpValue, totalSupply, underlyingCoins] = await Promise.all([
     getRewardRate(pool.crvRewards),
     getCurveLpValue(pool.swap),
     getTotalSupply(pool.crvRewards),
-    getUnderlyingCoins(chainId, pool.swap, provider),
+    getUnderlyingCoins(registryAddress, pool.swap, provider),
   ]);
   const underlyingPrice = await getAveragePrice(underlyingCoins);
 
@@ -51,17 +51,19 @@ async function fetchPoolApr(
 }
 
 export default function usePoolApr(pool: Pool) {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const provider = useProvider();
   const { data: cvxInfo } = useCVXInfo();
 
-  const cvxPrice = useTokenPrice(ADDRESS[chainId].cvx);
-  const crvPrice = useTokenPrice(ADDRESS[chainId].crv);
+  const registryAddress = addresses.registry;
 
-  const shouldFetch = pool && chainId && cvxPrice && crvPrice;
+  const cvxPrice = useTokenPrice(addresses.cvx);
+  const crvPrice = useTokenPrice(addresses.crv);
+
+  const shouldFetch = !!pool && !!cvxPrice && !!crvPrice;
 
   return useSWR(
-    shouldFetch ? ['poolApr', pool, cvxInfo, cvxPrice, crvPrice, chainId, provider] : null,
+    shouldFetch ? ['poolApr', pool, cvxInfo, cvxPrice, crvPrice, registryAddress, provider] : null,
     fetchPoolApr,
   );
 }

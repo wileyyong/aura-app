@@ -5,9 +5,9 @@ import { Box, Tabs, Tab, AccordionDetails } from '@mui/material';
 import { DepositInput } from '../DepositInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
-import { ADDRESS } from '../../../constants';
-import { useAddress, useChainId, useSigner } from '../../../context/AppProvider';
+import { useAddress, useSigner } from '../../../context/AppProvider';
 import { CvxLocker__factory } from '../../../typechain';
+import { useAddresses } from '../../../hooks/useAddresses';
 
 interface Props {
   symbol: string;
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const AccordionInputDetails: FC<Props> = ({ ...props }) => {
-  const chainId = useChainId();
+  const addresses = useAddresses();
   const signer = useSigner();
   const address = useAddress();
 
@@ -25,14 +25,13 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
   const handleTabChange = (_: any, newValue: number) => setTabValue(newValue);
 
-  const cvxAddress = ADDRESS[chainId].cvx;
-  const cvxLocker = ADDRESS[chainId].cvxLocker;
+  const cvxAddress = addresses.cvx;
+  const cvxLocker = addresses.cvxLocker;
 
   const handleLock = (amount: BigNumberish) => {
     if (!signer || !address) return;
     const contract = CvxLocker__factory.connect(cvxLocker, signer);
 
-    // TODO: double check what this value should be
     const spendRatio = 0;
     return contract.lock(address, amount, spendRatio);
   };

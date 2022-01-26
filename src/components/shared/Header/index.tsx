@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { Button, Grid, Typography, Link, styled, Stack, Alert } from '@mui/material';
 
 import { useAddress, useConnect, useChainId } from '../../../context/AppProvider';
 import { mediumAddress } from '../../../utils';
-import { Link as RouterLink } from 'react-router-dom';
 import { ModalAccount } from '../ModalAccount';
-import { Button, Grid, Typography, Link, styled, Stack } from '@mui/material';
+import { supportedChainIds } from '../../../constants';
 
 const HeaderTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.success.main,
@@ -19,51 +20,56 @@ export const Header: FC = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const unsupportedChainId = !supportedChainIds.includes(chainId);
+
   return (
-    <Grid
-      container
-      spacing={2}
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      sx={{ mb: 2, py: 2 }}
-    >
-      <Grid item>
-        <Link component={RouterLink} to="/">
-          <HeaderTitle sx={{ typography: 'h5' }}>Aura</HeaderTitle>
-        </Link>
-      </Grid>
-      <Grid item>
-        <Grid container spacing={2} direction="row" alignItems="center">
-          <Grid item>
-            <Stack direction="row" spacing={2}>
-              <Link component={RouterLink} to="/stake" variant="body1">
-                Stake
-              </Link>
-              <Link component={RouterLink} to="/claim" variant="body1">
-                Claim
-              </Link>
-              <Link component={RouterLink} to="/lock" variant="body1">
-                Lock
-              </Link>
-            </Stack>
-          </Grid>
-          <Grid item>
-            {address ? (
-              <>
-                <Button variant="outlined" onClick={handleOpen}>
-                  {mediumAddress(address)} [{chainId}]
+    <>
+      <Grid
+        container
+        spacing={2}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ mb: 2, py: 2 }}
+      >
+        <Grid item>
+          <Link component={RouterLink} to="/">
+            <HeaderTitle sx={{ typography: 'h5' }}>Aura</HeaderTitle>
+          </Link>
+        </Grid>
+        <Grid item>
+          <Grid container spacing={2} direction="row" alignItems="center">
+            <Grid item>
+              <Stack direction="row" spacing={2}>
+                <Link component={RouterLink} to="/stake" variant="body1">
+                  Stake
+                </Link>
+                <Link component={RouterLink} to="/claim" variant="body1">
+                  Claim
+                </Link>
+                <Link component={RouterLink} to="/lock" variant="body1">
+                  Lock
+                </Link>
+              </Stack>
+            </Grid>
+            <Grid item>
+              {address ? (
+                <>
+                  <Button variant="outlined" onClick={handleOpen}>
+                    {mediumAddress(address)} [{chainId}]
+                  </Button>
+                  <ModalAccount open={open} onClose={handleClose} />
+                </>
+              ) : (
+                <Button variant="contained" onClick={connect}>
+                  Connect Wallet
                 </Button>
-                <ModalAccount open={open} onClose={handleClose} />
-              </>
-            ) : (
-              <Button variant="contained" onClick={connect}>
-                Connect Wallet
-              </Button>
-            )}
+              )}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+      {unsupportedChainId && <Alert severity="warning">Please connect to a supported chain</Alert>}
+    </>
   );
 };
