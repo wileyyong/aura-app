@@ -29,7 +29,12 @@ export const WithdrawInput = ({
   const address = useAddress();
   const { data: balance, mutate: updateBalance } = useBalanceOf(stakeAddress, address);
 
-  const { register, handleSubmit, setValue } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -56,10 +61,22 @@ export const WithdrawInput = ({
     });
   };
 
+  const validate = (value: string) => {
+    if (value === '') return 'amount is required';
+    if (Number(value) <= 0) return 'amount must be greater than 0';
+    return false;
+  };
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack direction="row" spacing={2}>
-        <Input label={label} onMaxClick={handleMaxClick} {...register('amount')} />
+        <Input
+          error={!!errors?.amount?.message}
+          helperText={errors?.amount?.message}
+          label={label}
+          onMaxClick={handleMaxClick}
+          {...register('amount', { validate })}
+        />
         <Button type="submit" variant="contained">
           {buttonLabel}
         </Button>

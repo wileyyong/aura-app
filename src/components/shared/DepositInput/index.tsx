@@ -39,7 +39,12 @@ export const DepositInput = ({
   } = useAllowance(depositToken, address, depositAddress);
   const { data: balance, mutate: updateBalance } = useBalanceOf(depositToken, address);
 
-  const { register, handleSubmit, setValue } = useForm<FormValues>({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormValues>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
@@ -73,20 +78,34 @@ export const DepositInput = ({
     setLoading(false);
   };
 
+  const validate = (value: string) => {
+    if (value === '') return 'amount is required';
+    if (Number(value) <= 0) return 'amount must be greater than 0';
+    return false;
+  };
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack direction="row" spacing={2}>
-        <Input label={label} onMaxClick={handleMaxClick} {...register('amount')} />
-        <Button
-          variant="outlined"
-          onClick={handleApprove}
-          disabled={!allowance?.lte('0') || loading}
-        >
-          Approve
-        </Button>
-        <Button variant="contained" type="submit" disabled={allowance?.lte('0') || loading}>
-          {buttonLabel}
-        </Button>
+        <Input
+          error={!!errors?.amount?.message}
+          helperText={errors?.amount?.message}
+          label={label}
+          onMaxClick={handleMaxClick}
+          {...register('amount', { validate })}
+        />
+        <Stack direction="row" spacing={2}>
+          <Button
+            variant="outlined"
+            onClick={handleApprove}
+            disabled={!allowance?.lte('0') || loading}
+          >
+            Approve
+          </Button>
+          <Button variant="contained" type="submit" disabled={allowance?.lte('0') || loading}>
+            {buttonLabel}
+          </Button>
+        </Stack>
       </Stack>
     </form>
   );

@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { styled, TextField, Button } from '@mui/material';
+import { styled, TextField, Button, TextFieldProps } from '@mui/material';
 
 interface InputProps {
   onMaxClick: any;
@@ -16,23 +16,25 @@ const MaxButton = styled(Button)`
   top: 5px;
 `;
 
-export const Input = forwardRef(({ onMaxClick, label, ...props }: InputProps, ref: any) => {
-  return (
-    <TextFieldWrapper>
-      <TextField
-        {...props}
-        ref={ref}
-        sx={{ minWidth: '380px' }}
-        InputLabelProps={{ shrink: true }}
-        size="small"
-        label={label}
-        variant="outlined"
-      />
-      {onMaxClick && (
-        <MaxButton onClick={onMaxClick} size="small" variant="contained">
-          Max
-        </MaxButton>
-      )}
-    </TextFieldWrapper>
-  );
-});
+export const Input = forwardRef(
+  ({ onMaxClick, label, ...props }: InputProps & TextFieldProps, ref: any) => {
+    return (
+      <TextFieldWrapper>
+        <TextField
+          {...props}
+          ref={ref}
+          sx={{ minWidth: '380px' }}
+          InputLabelProps={{ shrink: true }}
+          size="small"
+          label={label}
+          variant="outlined"
+        />
+        {onMaxClick && (
+          <MaxButton onClick={onMaxClick} size="small" variant="contained">
+            Max
+          </MaxButton>
+        )}
+      </TextFieldWrapper>
+    );
+  },
+);
