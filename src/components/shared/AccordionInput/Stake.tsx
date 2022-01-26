@@ -6,7 +6,6 @@ import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { ADDRESS } from '../../../constants';
 import { useChainId, useSigner } from '../../../context/AppProvider';
-import { handleTx } from '../../../utils/handleTx';
 import { CvxRewardPool__factory } from '../../../typechain';
 import { BigNumberish } from 'ethers';
 
@@ -35,17 +34,13 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   // Stake CVX into cvx reward contract
   const handleDeposit = (amount: BigNumberish) => {
     if (!cvxRewardPool) return;
-    handleTx(() => {
-      return cvxRewardPool.stake(amount);
-    });
+    return cvxRewardPool.stake(amount);
   };
-  
+
   // Withdraw staked CVX from reward contract
   const handleWithdraw = (amount: BigNumberish) => {
     if (!cvxRewardPool) return;
-    handleTx(() => {
-      return cvxRewardPool.withdraw(amount, true);
-    });
+    return cvxRewardPool.withdraw(amount, true);
   };
 
   return (

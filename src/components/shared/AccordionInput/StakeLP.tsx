@@ -40,28 +40,22 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
   // then stake pool token into rewards contract
   const handleDepositStake = (amount: BigNumberish) => {
     if (!booster) return;
-    handleTx(() => {
-      const stake = true;
-      return booster.deposit(pool.poolId, amount, stake);
-    });
+    const stake = true;
+    return booster.deposit(pool.poolId, amount, stake);
   };
 
   // Unstake from the rewards pool
   const handleUnstake = (amount: BigNumberish) => {
     if (!signer) return;
     const rewards = CvxRewardPool__factory.connect(pool.crvRewards, signer);
-    handleTx(async () => {
-      const claim = true;
-      return rewards.withdraw(amount, claim);
-    });
+    const claim = true;
+    return rewards.withdraw(amount, claim);
   };
-  
+
   // Withdraw LP tokens
   const handleWithdraw = (amount: BigNumberish) => {
     if (!booster) return;
-    handleTx(async () => {
-      return booster.withdraw(pool.poolId, amount);
-    });
+    return booster.withdraw(pool.poolId, amount);
   };
 
   return (

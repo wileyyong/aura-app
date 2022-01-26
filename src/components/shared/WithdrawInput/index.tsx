@@ -1,5 +1,5 @@
 import React from 'react';
-import { BigNumberish } from 'ethers';
+import { BigNumberish, ContractTransaction } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { Stack, Button } from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -7,12 +7,13 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Input } from '../Input';
 import { useBalanceOf } from '../../../hooks/useBalanceOf';
 import { useAddress } from '../../../context/AppProvider';
+import { handleTx } from '../../../utils/handleTx';
 
 export interface DepositInputProps {
   label: string;
   buttonLabel: string;
   stakeAddress: string;
-  onWithdraw?: (amount: BigNumberish) => void;
+  onWithdraw?: (amount: BigNumberish) => Promise<ContractTransaction> | undefined;
 }
 
 interface FormValues {
@@ -26,7 +27,7 @@ export const WithdrawInput = ({
   stakeAddress,
 }: DepositInputProps) => {
   const address = useAddress();
-  const { data: balance } = useBalanceOf(stakeAddress, address);
+  const { data: balance, mutate: updateBalance } = useBalanceOf(stakeAddress, address);
 
   const { register, handleSubmit, setValue } = useForm<FormValues>({
     mode: 'onChange',
@@ -35,7 +36,15 @@ export const WithdrawInput = ({
 
   const submit: SubmitHandler<FormValues> = (values: FormValues) => {
     const amount = parseEther(values.amount);
-    onWithdraw && onWithdraw(amount);
+    onWithdraw &&
+      handleTx(
+        () => {
+          return onWithdraw(amount);
+        },
+        () => {
+          updateBalance();
+        },
+      );
   };
 
   const handleMaxClick = () => {

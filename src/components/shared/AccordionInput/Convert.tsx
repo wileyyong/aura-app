@@ -9,7 +9,6 @@ import { TabPanel } from '../TabPanel';
 import { useChainId, useSigner } from '../../../context/AppProvider';
 import { ADDRESS } from '../../../constants';
 import { CrvDepositor__factory, CvxRewardPool__factory } from '../../../typechain';
-import { handleTx } from '../../../utils/handleTx';
 
 interface Props {
   symbol: string;
@@ -31,22 +30,14 @@ const AccordionInputDetails: FC<Props> = () => {
 
   const handleDeposit = (amount: BigNumberish) => {
     if (!signer) return;
-
     const crvDepositor = CrvDepositor__factory.connect(depositAddress, signer);
-
-    handleTx(() => {
-      return crvDepositor['deposit(uint256,bool,address)'](amount, false, stakeAddress);
-    });
+    return crvDepositor['deposit(uint256,bool,address)'](amount, false, stakeAddress);
   };
 
   const handleWithdraw = (amount: BigNumberish) => {
     if (!signer) return;
-
     const rewardsPool = CvxRewardPool__factory.connect(stakeAddress, signer);
-
-    handleTx(() => {
-      return rewardsPool.withdraw(amount, true);
-    });
+    return rewardsPool.withdraw(amount, true);
   };
 
   return (

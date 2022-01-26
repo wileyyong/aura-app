@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Stack, Button } from '@mui/material';
-import { BigNumber, BigNumberish, ethers } from 'ethers';
+import { BigNumberish, ContractTransaction, ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Input } from '../Input';
+import { handleTx } from '../../../utils/handleTx';
 import { useBalanceOf } from '../../../hooks/useBalanceOf';
 import { useAddress } from '../../../context/AppProvider';
 import { useAllowance } from '../../../hooks/useAllowance';
@@ -14,7 +15,7 @@ export interface DepositInputProps {
   buttonLabel: string;
   depositToken: string;
   depositAddress: string;
-  onDeposit?: (amount: BigNumberish) => void;
+  onDeposit?: (amount: BigNumberish) => Promise<ContractTransaction> | undefined;
 }
 
 interface FormValues {
@@ -36,7 +37,7 @@ export const DepositInput = ({
     mutate: updateAllowance,
     approve,
   } = useAllowance(depositToken, address, depositAddress);
-  const { data: balance } = useBalanceOf(depositToken, address);
+  const { data: balance, mutate: updateBalance } = useBalanceOf(depositToken, address);
 
   const { register, handleSubmit, setValue } = useForm<FormValues>({
     mode: 'onChange',
@@ -45,7 +46,15 @@ export const DepositInput = ({
 
   const submit: SubmitHandler<FormValues> = values => {
     const amount = parseEther(values.amount);
-    onDeposit && onDeposit(amount);
+    onDeposit &&
+      handleTx(
+        () => {
+          return onDeposit(amount);
+        },
+        () => {
+          updateBalance();
+        },
+      );
   };
 
   const handleMaxClick = () => {

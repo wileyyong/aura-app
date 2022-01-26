@@ -8,7 +8,6 @@ import { TabPanel } from '../TabPanel';
 import { ADDRESS } from '../../../constants';
 import { useAddress, useChainId, useSigner } from '../../../context/AppProvider';
 import { CvxLocker__factory } from '../../../typechain';
-import { handleTx } from '../../../utils/handleTx';
 
 interface Props {
   symbol: string;
@@ -31,15 +30,11 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
   const handleLock = (amount: BigNumberish) => {
     if (!signer || !address) return;
-
     const contract = CvxLocker__factory.connect(cvxLocker, signer);
 
     // TODO: double check what this value should be
     const spendRatio = 0;
-
-    handleTx(() => {
-      return contract.lock(address, amount, spendRatio);
-    });
+    return contract.lock(address, amount, spendRatio);
   };
 
   return (
