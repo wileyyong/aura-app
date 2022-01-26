@@ -94,7 +94,7 @@ export const DepositInput = ({
           onMaxClick={handleMaxClick}
           {...register('amount', { validate })}
         />
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} sx={{ height: '40px' }}>
           <Button
             variant="outlined"
             onClick={handleApprove}

@@ -77,9 +77,11 @@ export const WithdrawInput = ({
           onMaxClick={handleMaxClick}
           {...register('amount', { validate })}
         />
-        <Button type="submit" variant="contained">
-          {buttonLabel}
-        </Button>
+        <Stack direction="row" spacing={2} sx={{ height: '40px' }}>
+          <Button type="submit" variant="contained">
+            {buttonLabel}
+          </Button>
+        </Stack>
       </Stack>
     </form>
   );
