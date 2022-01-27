@@ -4,7 +4,7 @@ import { AccordionInput } from '../AccordionInput';
 
 interface Props {
   symbol: string;
-  apr?: { total: number; [key: string]: number };
+  apr?: { [key: string]: { label: string; value: number } };
   tvl?: number;
   share?: number;
 }
@@ -36,7 +36,7 @@ export const ClaimAccordion: FC<Props> = ({ ...props }) => {
         {
           key: 'earned',
           title: 'Earned',
-          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
         },
         {
           key: 'apr',

@@ -1,3 +1,4 @@
+import { BigNumberish } from 'ethers';
 import { FC, MouseEvent, useState } from 'react';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import {
@@ -10,6 +11,7 @@ import {
   styled,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+
 import { TokenIcon } from '../TokenIcon';
 import { ModalPool } from '../ModalPool';
 
@@ -19,6 +21,7 @@ export interface AccordionItemProps {
   onChange?: any;
   highlighted?: boolean;
   showArrowIcon?: boolean;
+  apr?: { [key: string]: { label: string; value: number } };
   items: {
     key: string;
     title?: string;
@@ -71,6 +74,7 @@ export const AccordionInput: FC<AccordionItemProps> = ({
   children,
   symbol,
   items,
+  apr,
   showArrowIcon = true,
 }) => {
   const [infoModalOpen, setInfoModalOpen] = useState(false);
@@ -138,7 +142,7 @@ export const AccordionInput: FC<AccordionItemProps> = ({
         </AccordionSummary>
         {children}
       </StyledAccordion>
-      <ModalPool open={infoModalOpen} onClose={handleClose} />
+      <ModalPool open={infoModalOpen} onClose={handleClose} apr={apr} />
     </Grid>
   );
 };

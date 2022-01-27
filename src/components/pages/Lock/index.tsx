@@ -10,19 +10,27 @@ export const Lock: FC = () => {
   const stakedCVXAPR = useStakedCVXAPR();
   const lockedCVXAPR = useLockedCVXAPR();
 
+  const stakedApr = stakedCVXAPR && {
+    total: { label: 'Total vAPR', value: stakedCVXAPR.total },
+  };
+
+  const lockedApr = lockedCVXAPR && {
+    total: { label: 'Total vAPR', value: lockedCVXAPR.total },
+  };
+
   return (
     <Box>
       <Box mb={4}>
         <Box mb={2}>
           <Heading title="Lock Aura" />
         </Box>
-        <LockAccordion symbol={'Locked AURA'} apr={lockedCVXAPR} share={0} />
+        <LockAccordion symbol={'Locked AURA'} apr={lockedApr} share={0} />
       </Box>
       <Box mb={4}>
         <Box mb={2}>
           <Heading title="Stake your AURA to earn auraBAL" />
         </Box>
-        <StakeAccordion symbol={'AURA'} apr={stakedCVXAPR} share={0} />
+        <StakeAccordion symbol={'AURA'} apr={stakedApr} share={0} />
       </Box>
     </Box>
   );

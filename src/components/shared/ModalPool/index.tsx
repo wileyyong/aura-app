@@ -39,10 +39,15 @@ const TableRow: FC<{ title: string; value?: string }> = ({ title, value }) => {
   );
 };
 
-export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({
-  open,
-  onClose,
-}) => {
+interface ModalPoolProps {
+  apr?: { [key: string]: { label: string; value: number } };
+  open: boolean;
+  onClose: () => void;
+}
+
+export const ModalPool: FC<ModalPoolProps> = ({ apr, open, onClose }) => {
+  const { total: totalApr, ...aprData } = apr || {};
+
   return (
     <Modal open={open} onClose={onClose}>
       <ModalBox>
@@ -52,12 +57,7 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({
               <b>Staked auraBAL</b> rewards
             </Typography>
           </Header>
-          <Grid
-            container
-            item
-            direction="column"
-            sx={{ borderRadius: 2, overflow: 'hidden' }}
-          >
+          <Grid container item direction="column" sx={{ borderRadius: 2, overflow: 'hidden' }}>
             <Grid
               container
               direction="row"
@@ -68,7 +68,7 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({
                 <Typography sx={{ fontSize: '1rem' }}>Current vAPR</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">XX%</Typography>
+                <Typography variant="h5">{(totalApr?.value * 100).toFixed(2)}%</Typography>
               </Grid>
             </Grid>
             <Grid
@@ -77,18 +77,16 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({
               sx={{ bgcolor: 'grey.300', p: 1 }}
               justifyContent="space-between"
             >
-              <Grid
-                item
-                xs={4}
-                alignItems={'flex-start'}
-                justifyContent={'flex-start'}
-              >
+              <Grid item xs={4} alignItems={'flex-start'} justifyContent={'flex-start'}>
                 <CellText textAlign="left">Breakdown:</CellText>
               </Grid>
               <Grid item container direction="column" xs={8}>
-                <TableRow title="CRV vAPR" value="XX%" />
-                <TableRow title="CVX vAPR" value="XX%" />
-                <TableRow title="3crv vAPR" value="XX%" />
+                {aprData &&
+                  Object.values(aprData).map(
+                    ({ value, label }: { value: number; label: string }) => (
+                      <TableRow title={label} value={`${(value * 100).toFixed(2)}%`} />
+                    ),
+                  )}
                 <TableRow
                   title="Plus any airdrops to Curve veCRV, not counted in the total
                       APR"
@@ -111,8 +109,8 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({
               content={
                 <>
                   {/* // eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                  All rewards for <Link to="/">staked</Link> cvxCRV can be
-                  claimed from the Claim page:
+                  All rewards for <Link to="/">staked</Link> cvxCRV can be claimed from the Claim
+                  page:
                 </>
               }
             />

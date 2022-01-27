@@ -11,7 +11,7 @@ import { useAddresses } from '../../../hooks/useAddresses';
 
 interface Props {
   symbol: string;
-  apr?: { total: number; [key: string]: number };
+  apr?: { [key: string]: { label: string; value: number } };
   tvl?: number;
   share?: number;
 }
@@ -75,7 +75,7 @@ export const LockAccordion: FC<Props> = ({ ...props }) => {
         {
           key: 'apr',
           title: 'vAPR',
-          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
           onInfoClick: handleInfoClick,
         },
         {
