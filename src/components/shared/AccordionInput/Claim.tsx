@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { Box, AccordionDetails, Typography } from '@mui/material';
 import { AccordionInput } from '../AccordionInput';
-import { PoolApr } from '../../../types';
+import { RewardApr } from '../../../types';
 
 interface Props {
   symbol: string;
-  apr?: PoolApr;
+  apr?: RewardApr;
   tvl?: number;
   share?: number;
 }

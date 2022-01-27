@@ -3,9 +3,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
 import { useTokenPrice } from '../context/DataProvider';
 import { useAddresses } from './useAddresses';
+import { RewardApr } from '../types';
 
 // NOTE: CVX rewards address. Total supply * CVX price is TVL
-export const useStakedCVXAPR = () => {
+export const useStakedCVXAPR = (): RewardApr => {
   const contracts = useContracts();
   const addresses = useAddresses();
   const [apr, setApr] = useState(0);

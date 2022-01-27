@@ -12,18 +12,19 @@ import { useProvider } from './AppProvider';
 import { useContracts } from './ContractProvider';
 import { BigNumber } from 'ethers';
 import { TOKENS } from '../constants';
-import { PoolApr } from '../types';
+import { RewardApr } from '../types';
 
 interface State {
   initialised: boolean;
   prices?: Record<string, BigNumber>;
   modal?: {
-    poolApr?: PoolApr;
+    rewardApr?: RewardApr;
   };
 }
 
 interface Dispatch {
-  setModalData: (poolApr?: PoolApr) => void;
+  setModalData: (modal: { rewardApr?: RewardApr }) => void;
+  setRewardApr: (rewardApr?: RewardApr) => void;
 }
 
 const initialState = {
@@ -42,9 +43,19 @@ export const DataProvider: FC = ({ children }) => {
 
   // can expand at a later date
   const setModalData = useCallback(
-    (poolApr?: PoolApr) => {
-      if (!poolApr || poolApr?.total === state.modal?.poolApr?.total) return;
-      setState({ ...state, modal: { poolApr } });
+    (modal: { rewardApr?: RewardApr }) => {
+      if (!modal?.rewardApr) return;
+      const { rewardApr } = modal;
+      if (rewardApr?.total === state.modal?.rewardApr?.total) return;
+      setState({ ...state, modal: { rewardApr } });
+    },
+    [state],
+  );
+
+  const setRewardApr = useCallback(
+    (rewardApr?: RewardApr) => {
+      if (!rewardApr || rewardApr?.total === state.modal?.rewardApr?.total) return;
+      setState({ ...state, modal: { rewardApr } });
     },
     [state],
   );
@@ -63,7 +74,9 @@ export const DataProvider: FC = ({ children }) => {
 
   return (
     <stateCtx.Provider value={useMemo(() => state, [state])}>
-      <dispatchCtx.Provider value={useMemo(() => ({ setModalData }), [setModalData])}>
+      <dispatchCtx.Provider
+        value={useMemo(() => ({ setModalData, setRewardApr }), [setModalData, setRewardApr])}
+      >
         {children}
       </dispatchCtx.Provider>
     </stateCtx.Provider>
@@ -87,4 +100,9 @@ export const useDataDispatch = (): Dispatch => useContext(dispatchCtx);
 export const useModalData = (): [State['modal'], Dispatch['setModalData']] => [
   useContext(stateCtx).modal,
   useContext(dispatchCtx).setModalData,
+];
+
+export const useModalRewardApr = (): [RewardApr | undefined, Dispatch['setRewardApr']] => [
+  useContext(stateCtx).modal?.rewardApr,
+  useContext(dispatchCtx).setRewardApr,
 ];

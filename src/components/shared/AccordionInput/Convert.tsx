@@ -9,13 +9,13 @@ import { TabPanel } from '../TabPanel';
 import { useSigner } from '../../../context/AppProvider';
 import { CrvDepositor__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
-import { PoolApr } from '../../../types';
-import { useModalData } from '../../../context/DataProvider';
+import { RewardApr } from '../../../types';
+import { useModalRewardApr } from '../../../context/DataProvider';
 import { CvxRewardPool__factory } from '../../../typechain/factories/CvxRewardPool__factory';
 
 interface Props {
   symbol: string;
-  apr?: PoolApr;
+  apr?: RewardApr;
   tvl?: number;
   share?: number;
 }
@@ -78,11 +78,11 @@ const AccordionInputDetails: FC<Props> = () => {
 
 export const ConvertAccordion: FC<Props> = ({ ...props }) => {
   const { symbol, apr, share } = props;
-  const [, setModalData] = useModalData();
+  const [, setModalRewardApr] = useModalRewardApr();
 
   const handleInfoClick = () => {
     if (!apr) return;
-    setModalData({ ...apr, symbol: 'auraBAL' });
+    setModalRewardApr({ ...apr, symbol: 'auraBAL' });
   };
 
   return (

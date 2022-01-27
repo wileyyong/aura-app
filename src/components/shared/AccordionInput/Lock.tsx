@@ -8,12 +8,12 @@ import { TabPanel } from '../TabPanel';
 import { useAddress, useSigner } from '../../../context/AppProvider';
 import { CvxLocker__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
-import { PoolApr } from '../../../types';
-import { useModalData } from '../../../context/DataProvider';
+import { RewardApr } from '../../../types';
+import { useModalRewardApr } from '../../../context/DataProvider';
 
 interface Props {
   symbol: string;
-  apr?: PoolApr;
+  apr?: RewardApr;
   tvl?: number;
   share?: number;
 }
@@ -64,11 +64,11 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
 export const LockAccordion: FC<Props> = ({ ...props }) => {
   const { symbol, apr, share } = props;
-  const [, setModalData] = useModalData();
+  const [, setModalRewardApr] = useModalRewardApr();
 
   const handleInfoClick = () => {
     if (!apr) return;
-    setModalData({ ...apr, symbol });
+    setModalRewardApr({ ...apr, symbol });
   };
 
   return (

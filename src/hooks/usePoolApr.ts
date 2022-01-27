@@ -14,7 +14,7 @@ import { getAveragePrice } from '../fetchers/price';
 import { BigNumber } from 'ethers';
 import { useTokenPrice } from '../context/DataProvider';
 import { useAddresses } from './useAddresses';
-import { PoolApr } from '../types';
+import { RewardApr } from '../types';
 
 async function fetchPoolApr(
   _: string,
@@ -24,7 +24,7 @@ async function fetchPoolApr(
   crvPrice: number,
   registryAddress: string,
   provider: Web3Provider,
-): Promise<PoolApr> {
+): Promise<RewardApr> {
   const [rewardRate, curveLpValue, totalSupply, underlyingCoins] = await Promise.all([
     getRewardRate(pool.crvRewards),
     getCurveLpValue(pool.swap),

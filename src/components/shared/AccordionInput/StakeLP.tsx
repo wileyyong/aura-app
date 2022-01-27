@@ -8,15 +8,16 @@ import { WithdrawInput } from '../WithdrawInput';
 import { useSigner } from '../../../context/AppProvider';
 import { AccordionInput } from '../AccordionInput';
 import { Pool } from '../../../hooks/usePoolInfo';
-import { Booster__factory, CvxRewardPool__factory } from '../../../typechain';
+import { Booster__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
-import { PoolApr } from '../../../types';
-import { useModalData } from '../../../context/DataProvider';
+import { RewardApr } from '../../../types';
+import { useModalRewardApr } from '../../../context/DataProvider';
+import { CvxRewardPool__factory } from '../../../typechain/factories/CvxRewardPool__factory';
 
 interface Props {
   symbol: string;
   pool: Pool;
-  apr?: PoolApr;
+  apr?: RewardApr;
   tvl?: number;
   share?: number;
 }
@@ -102,11 +103,11 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
 
 export const StakeLPAccordion: FC<Props> = ({ pool, ...props }) => {
   const { symbol, apr, share } = props;
-  const [, setModalData] = useModalData();
+  const [, setModalRewardApr] = useModalRewardApr();
 
   const handleInfoClick = () => {
     if (!apr) return;
-    setModalData({ ...apr, symbol });
+    setModalRewardApr({ ...apr, symbol });
   };
 
   return (

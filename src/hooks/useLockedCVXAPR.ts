@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
 import { useTokenPrice } from '../context/DataProvider';
 import { useAddresses } from './useAddresses';
+import { RewardApr } from '../types';
 
-export const useLockedCVXAPR = () => {
+export const useLockedCVXAPR = (): RewardApr => {
   const addresses = useAddresses();
   const contracts = useContracts();
   const [apr, setApr] = useState(0);

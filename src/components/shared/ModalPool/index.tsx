@@ -42,10 +42,10 @@ const TableRow: FC<{ title: string; value?: string }> = ({ title, value }) => {
 
 export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
   const [modalData, setModalData] = useModalData();
-  const poolApr = modalData?.poolApr;
+  const rewardApr = modalData?.rewardApr;
 
   const handleOnClose = () => {
-    setModalData(undefined);
+    setModalData({ rewardApr: undefined });
     onClose();
   };
 
@@ -55,7 +55,7 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, on
         <Grid container direction="column">
           <Header item sx={{ mb: 2 }}>
             <Typography sx={{ fontSize: '1.25rem', p: 1 }}>
-              <b>Staked {poolApr?.symbol ?? 'Dummy'}</b> rewards
+              <b>Staked {rewardApr?.symbol ?? 'Dummy'}</b> rewards
             </Typography>
           </Header>
           <Grid container item direction="column" sx={{ borderRadius: 2, overflow: 'hidden' }}>
@@ -69,7 +69,7 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, on
                 <Typography sx={{ fontSize: '1rem' }}>Current vAPR</Typography>
               </Grid>
               <Grid item>
-                <Typography>{((poolApr?.total ?? 0) * 100)?.toFixed(2)}%</Typography>
+                <Typography>{((rewardApr?.total ?? 0) * 100)?.toFixed(2)}%</Typography>
               </Grid>
             </Grid>
             <Grid
@@ -82,14 +82,14 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, on
                 <CellText textAlign="left">Breakdown:</CellText>
               </Grid>
               <Grid item container direction="column" xs={8}>
-                {poolApr?.crvApr && (
-                  <TableRow title="CRV vAPR" value={`${(poolApr.crvApr * 100).toFixed(2)}%`} />
+                {rewardApr?.crvApr && (
+                  <TableRow title="CRV vAPR" value={`${(rewardApr.crvApr * 100).toFixed(2)}%`} />
                 )}
-                {poolApr?.cvxApr && (
-                  <TableRow title="CVX vAPR" value={`${(poolApr.cvxApr * 100).toFixed(2)}%`} />
+                {rewardApr?.cvxApr && (
+                  <TableRow title="CVX vAPR" value={`${(rewardApr.cvxApr * 100).toFixed(2)}%`} />
                 )}
-                {poolApr?.threeApr && (
-                  <TableRow title="3crv vAPR" value={`${(poolApr.threeApr * 100).toFixed(2)}%`} />
+                {rewardApr?.threeApr && (
+                  <TableRow title="3crv vAPR" value={`${(rewardApr.threeApr * 100).toFixed(2)}%`} />
                 )}
                 <TableRow
                   title="Plus any airdrops to Curve veCRV, not counted in the total

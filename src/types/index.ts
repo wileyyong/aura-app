@@ -1,4 +1,4 @@
-export interface PoolApr {
+export interface RewardApr {
   total: number;
   crvApr?: number;
   cvxApr?: number;
