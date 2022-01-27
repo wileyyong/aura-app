@@ -7,12 +7,15 @@ import { WithdrawInput } from '../WithdrawInput';
 import { AccordionInput } from '../AccordionInput';
 import { TabPanel } from '../TabPanel';
 import { useSigner } from '../../../context/AppProvider';
-import { CrvDepositor__factory, CvxRewardPool__factory } from '../../../typechain';
+import { CrvDepositor__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
+import { PoolApr } from '../../../types';
+import { useModalData } from '../../../context/DataProvider';
+import { CvxRewardPool__factory } from '../../../typechain/factories/CvxRewardPool__factory';
 
 interface Props {
   symbol: string;
-  apr?: { [key: string]: { label: string; value: number } };
+  apr?: PoolApr;
   tvl?: number;
   share?: number;
 }
@@ -75,11 +78,15 @@ const AccordionInputDetails: FC<Props> = () => {
 
 export const ConvertAccordion: FC<Props> = ({ ...props }) => {
   const { symbol, apr, share } = props;
-  const handleInfoClick = () => {};
+  const [, setModalData] = useModalData();
+
+  const handleInfoClick = () => {
+    if (!apr) return;
+    setModalData({ ...apr, symbol: 'auraBAL' });
+  };
 
   return (
     <AccordionInput
-      {...props}
       showArrowIcon={false}
       symbol={symbol}
       highlighted
@@ -88,8 +95,8 @@ export const ConvertAccordion: FC<Props> = ({ ...props }) => {
         {
           key: 'apr',
           title: 'vAPR',
-          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
-          onInfoClick: handleInfoClick,
+          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          onInfoClick: apr ? handleInfoClick : undefined,
         },
         {
           key: 'my-stake',

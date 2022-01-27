@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { Web3Provider } from '@ethersproject/providers';
 
-import { useChainId, useProvider } from '../context/AppProvider';
+import { useProvider } from '../context/AppProvider';
 import useCVXInfo from './useCVXInfo';
 import { Pool } from './usePoolInfo';
 import getRewardRate from '../fetchers/rewardRate';
@@ -14,6 +14,7 @@ import { getAveragePrice } from '../fetchers/price';
 import { BigNumber } from 'ethers';
 import { useTokenPrice } from '../context/DataProvider';
 import { useAddresses } from './useAddresses';
+import { PoolApr } from '../types';
 
 async function fetchPoolApr(
   _: string,
@@ -23,7 +24,7 @@ async function fetchPoolApr(
   crvPrice: number,
   registryAddress: string,
   provider: Web3Provider,
-) {
+): Promise<PoolApr> {
   const [rewardRate, curveLpValue, totalSupply, underlyingCoins] = await Promise.all([
     getRewardRate(pool.crvRewards),
     getCurveLpValue(pool.swap),

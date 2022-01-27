@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { Box, AccordionDetails, Typography } from '@mui/material';
 import { AccordionInput } from '../AccordionInput';
+import { PoolApr } from '../../../types';
 
 interface Props {
   symbol: string;
-  apr?: { [key: string]: { label: string; value: number } };
+  apr?: PoolApr;
   tvl?: number;
   share?: number;
 }
@@ -28,7 +29,6 @@ export const ClaimAccordion: FC<Props> = ({ ...props }) => {
 
   return (
     <AccordionInput
-      {...props}
       highlighted={true}
       showArrowIcon={true}
       symbol={symbol}
@@ -36,7 +36,7 @@ export const ClaimAccordion: FC<Props> = ({ ...props }) => {
         {
           key: 'earned',
           title: 'Earned',
-          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
+          value: `${apr && (apr.total * 100).toFixed(2)}%`,
         },
         {
           key: 'apr',

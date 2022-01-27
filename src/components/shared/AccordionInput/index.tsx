@@ -36,10 +36,11 @@ export interface AccordionItemProps {
 
 const Info = styled(InfoIcon)`
   margin-left: 0.5rem;
+  border-radius: 1rem;
+  transition: ease-out box-shadow 0.25s;
 
   :hover {
-    box-shadow: 0 0 0 1px red;
-    border-radius: 1rem;
+    box-shadow: 0 0 0 1px ${({ theme }) => theme.palette.primary.main};
   }
 `;
 
@@ -85,8 +86,8 @@ export const AccordionInput: FC<AccordionItemProps> = ({
 
   const handleInfoClick = (event?: MouseEvent<SVGSVGElement>, action?: () => void) => {
     event?.stopPropagation();
-    handleOpen();
     action?.();
+    handleOpen();
   };
 
   const handleButtonClick = (event?: MouseEvent<HTMLButtonElement>, action?: () => void) => {
@@ -142,7 +143,7 @@ export const AccordionInput: FC<AccordionItemProps> = ({
         </AccordionSummary>
         {children}
       </StyledAccordion>
-      <ModalPool open={infoModalOpen} onClose={handleClose} apr={apr} />
+      <ModalPool open={infoModalOpen} onClose={handleClose} />
     </Grid>
   );
 };

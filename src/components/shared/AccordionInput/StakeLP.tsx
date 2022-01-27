@@ -10,11 +10,13 @@ import { AccordionInput } from '../AccordionInput';
 import { Pool } from '../../../hooks/usePoolInfo';
 import { Booster__factory, CvxRewardPool__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
+import { PoolApr } from '../../../types';
+import { useModalData } from '../../../context/DataProvider';
 
 interface Props {
   symbol: string;
   pool: Pool;
-  apr?: { [key: string]: { label: string; value: number } };
+  apr?: PoolApr;
   tvl?: number;
   share?: number;
 }
@@ -100,17 +102,21 @@ const AccordionInputDetails: FC<Props> = ({ pool, ...props }) => {
 
 export const StakeLPAccordion: FC<Props> = ({ pool, ...props }) => {
   const { symbol, apr, share } = props;
-  const handleInfoClick = () => {};
+  const [, setModalData] = useModalData();
+
+  const handleInfoClick = () => {
+    if (!apr) return;
+    setModalData({ ...apr, symbol });
+  };
 
   return (
     <AccordionInput
-      {...props}
       symbol={symbol}
       items={[
         {
           key: 'apr',
-          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
-          onInfoClick: handleInfoClick,
+          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          onInfoClick: apr ? handleInfoClick : undefined,
         },
         {
           key: 'my-stake',

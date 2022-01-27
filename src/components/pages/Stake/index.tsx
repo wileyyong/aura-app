@@ -10,10 +10,10 @@ export const Stake: FC = () => {
   const { data: stakedCVXCRVAPR } = useStakedCVXCRVAPR();
 
   const apr = stakedCVXCRVAPR && {
-    total: { label: 'Total vAPR', value: stakedCVXCRVAPR.total },
-    crvApr: { label: 'CRV vAPR', value: stakedCVXCRVAPR.crvAPR },
-    cvxApr: { label: 'CVX vAPR', value: stakedCVXCRVAPR.cvxAPR },
-    threeApr: { label: 'Three vAPR', value: stakedCVXCRVAPR.threeAPR },
+    total: stakedCVXCRVAPR.total,
+    crvApr: stakedCVXCRVAPR.crvAPR,
+    cvxApr: stakedCVXCRVAPR.cvxAPR,
+    threeApr: stakedCVXCRVAPR.threeAPR,
   };
 
   return (

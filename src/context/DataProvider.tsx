@@ -1,17 +1,29 @@
-import React, { FC, createContext, useEffect, useMemo, useContext, useState } from 'react';
+import React, {
+  FC,
+  createContext,
+  useEffect,
+  useMemo,
+  useContext,
+  useState,
+  useCallback,
+} from 'react';
 import { usePrices } from '../hooks/usePrices';
 import { useProvider } from './AppProvider';
 import { useContracts } from './ContractProvider';
 import { BigNumber } from 'ethers';
 import { TOKENS } from '../constants';
+import { PoolApr } from '../types';
 
 interface State {
   initialised: boolean;
   prices?: Record<string, BigNumber>;
+  modal?: {
+    poolApr?: PoolApr;
+  };
 }
 
 interface Dispatch {
-  setDummyAction?: () => void;
+  setModalData: (poolApr?: PoolApr) => void;
 }
 
 const initialState = {
@@ -21,9 +33,6 @@ const initialState = {
 const stateCtx = createContext<State>(null as never);
 const dispatchCtx = createContext<Dispatch>(null as never);
 
-/* MARK: - Data provider
- */
-
 export const DataProvider: FC = ({ children }) => {
   const provider = useProvider();
   const contracts = useContracts();
@@ -31,7 +40,14 @@ export const DataProvider: FC = ({ children }) => {
 
   const [state, setState] = useState<State>(initialState);
 
-  const setDummyAction = () => {};
+  // can expand at a later date
+  const setModalData = useCallback(
+    (poolApr?: PoolApr) => {
+      if (!poolApr || poolApr?.total === state.modal?.poolApr?.total) return;
+      setState({ ...state, modal: { poolApr } });
+    },
+    [state],
+  );
 
   useEffect(() => {
     (async () => {
@@ -47,7 +63,7 @@ export const DataProvider: FC = ({ children }) => {
 
   return (
     <stateCtx.Provider value={useMemo(() => state, [state])}>
-      <dispatchCtx.Provider value={useMemo(() => ({ setDummyAction }), [])}>
+      <dispatchCtx.Provider value={useMemo(() => ({ setModalData }), [setModalData])}>
         {children}
       </dispatchCtx.Provider>
     </stateCtx.Provider>
@@ -67,3 +83,8 @@ export const useTokenPrice = (address: string): BigNumber | undefined =>
   useContext(stateCtx).prices?.[address.toLowerCase()];
 
 export const useDataDispatch = (): Dispatch => useContext(dispatchCtx);
+
+export const useModalData = (): [State['modal'], Dispatch['setModalData']] => [
+  useContext(stateCtx).modal,
+  useContext(dispatchCtx).setModalData,
+];

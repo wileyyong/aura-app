@@ -11,11 +11,11 @@ export const Lock: FC = () => {
   const lockedCVXAPR = useLockedCVXAPR();
 
   const stakedApr = stakedCVXAPR && {
-    total: { label: 'Total vAPR', value: stakedCVXAPR.total },
+    total: stakedCVXAPR.total,
   };
 
   const lockedApr = lockedCVXAPR && {
-    total: { label: 'Total vAPR', value: lockedCVXAPR.total },
+    total: lockedCVXAPR.total,
   };
 
   return (

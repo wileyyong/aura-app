@@ -3,6 +3,7 @@ import { Modal, styled, Typography, Grid } from '@mui/material';
 import { AccordionInfo } from '../AccordionInfo';
 import { Link } from 'react-router-dom';
 import { ModalBox } from '../index';
+import { useModalData } from '../../../context/DataProvider';
 
 const Header = styled(Grid)`
   text-align: center;
@@ -10,7 +11,7 @@ const Header = styled(Grid)`
 `;
 
 const CellText = styled(Typography)`
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   text-align: left;
 `;
 
@@ -39,22 +40,22 @@ const TableRow: FC<{ title: string; value?: string }> = ({ title, value }) => {
   );
 };
 
-interface ModalPoolProps {
-  apr?: { [key: string]: { label: string; value: number } };
-  open: boolean;
-  onClose: () => void;
-}
+export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+  const [modalData, setModalData] = useModalData();
+  const poolApr = modalData?.poolApr;
 
-export const ModalPool: FC<ModalPoolProps> = ({ apr, open, onClose }) => {
-  const { total: totalApr, ...aprData } = apr || {};
+  const handleOnClose = () => {
+    setModalData(undefined);
+    onClose();
+  };
 
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={handleOnClose}>
       <ModalBox>
         <Grid container direction="column">
           <Header item sx={{ mb: 2 }}>
             <Typography sx={{ fontSize: '1.25rem', p: 1 }}>
-              <b>Staked auraBAL</b> rewards
+              <b>Staked {poolApr?.symbol ?? 'Dummy'}</b> rewards
             </Typography>
           </Header>
           <Grid container item direction="column" sx={{ borderRadius: 2, overflow: 'hidden' }}>
@@ -68,7 +69,7 @@ export const ModalPool: FC<ModalPoolProps> = ({ apr, open, onClose }) => {
                 <Typography sx={{ fontSize: '1rem' }}>Current vAPR</Typography>
               </Grid>
               <Grid item>
-                <Typography variant="h5">{(totalApr?.value * 100).toFixed(2)}%</Typography>
+                <Typography>{((poolApr?.total ?? 0) * 100)?.toFixed(2)}%</Typography>
               </Grid>
             </Grid>
             <Grid
@@ -81,12 +82,15 @@ export const ModalPool: FC<ModalPoolProps> = ({ apr, open, onClose }) => {
                 <CellText textAlign="left">Breakdown:</CellText>
               </Grid>
               <Grid item container direction="column" xs={8}>
-                {aprData &&
-                  Object.values(aprData).map(
-                    ({ value, label }: { value: number; label: string }) => (
-                      <TableRow title={label} value={`${(value * 100).toFixed(2)}%`} />
-                    ),
-                  )}
+                {poolApr?.crvApr && (
+                  <TableRow title="CRV vAPR" value={`${(poolApr.crvApr * 100).toFixed(2)}%`} />
+                )}
+                {poolApr?.cvxApr && (
+                  <TableRow title="CVX vAPR" value={`${(poolApr.cvxApr * 100).toFixed(2)}%`} />
+                )}
+                {poolApr?.threeApr && (
+                  <TableRow title="3crv vAPR" value={`${(poolApr.threeApr * 100).toFixed(2)}%`} />
+                )}
                 <TableRow
                   title="Plus any airdrops to Curve veCRV, not counted in the total
                       APR"

@@ -8,10 +8,12 @@ import { TabPanel } from '../TabPanel';
 import { useAddress, useSigner } from '../../../context/AppProvider';
 import { CvxLocker__factory } from '../../../typechain';
 import { useAddresses } from '../../../hooks/useAddresses';
+import { PoolApr } from '../../../types';
+import { useModalData } from '../../../context/DataProvider';
 
 interface Props {
   symbol: string;
-  apr?: { [key: string]: { label: string; value: number } };
+  apr?: PoolApr;
   tvl?: number;
   share?: number;
 }
@@ -62,11 +64,15 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
 export const LockAccordion: FC<Props> = ({ ...props }) => {
   const { symbol, apr, share } = props;
-  const handleInfoClick = () => {};
+  const [, setModalData] = useModalData();
+
+  const handleInfoClick = () => {
+    if (!apr) return;
+    setModalData({ ...apr, symbol });
+  };
 
   return (
     <AccordionInput
-      {...props}
       showArrowIcon={false}
       symbol={symbol}
       highlighted
@@ -75,8 +81,8 @@ export const LockAccordion: FC<Props> = ({ ...props }) => {
         {
           key: 'apr',
           title: 'vAPR',
-          value: `${apr && (apr.total.value * 100).toFixed(2)}%`,
-          onInfoClick: handleInfoClick,
+          value: `${apr && (apr.total * 100).toFixed(2)}%`,
+          onInfoClick: apr ? handleInfoClick : undefined,
         },
         {
           key: 'my-stake',
