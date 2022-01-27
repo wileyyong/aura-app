@@ -1,4 +1,3 @@
-import { BigNumberish } from 'ethers';
 import { FC, MouseEvent, useState } from 'react';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import {
@@ -13,7 +12,7 @@ import {
 import InfoIcon from '@mui/icons-material/Info';
 
 import { TokenIcon } from '../TokenIcon';
-import { ModalPool } from '../ModalPool';
+import { ModalReward } from '../ModalReward';
 
 export interface AccordionItemProps {
   symbol: string;
@@ -143,7 +142,7 @@ export const AccordionInput: FC<AccordionItemProps> = ({
         </AccordionSummary>
         {children}
       </StyledAccordion>
-      <ModalPool open={infoModalOpen} onClose={handleClose} />
+      <ModalReward open={infoModalOpen} onClose={handleClose} />
     </Grid>
   );
 };

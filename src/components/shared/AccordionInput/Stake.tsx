@@ -8,7 +8,7 @@ import { TabPanel } from '../TabPanel';
 import { useSigner } from '../../../context/AppProvider';
 import { useAddresses } from '../../../hooks/useAddresses';
 import { RewardApr } from '../../../types';
-import { useModalRewardApr } from '../../../context/DataProvider';
+import { useModalData } from '../../../context/DataProvider';
 import { CvxRewardPool__factory } from '../../../typechain/factories/CvxRewardPool__factory';
 
 interface Props {
@@ -80,11 +80,19 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
 export const StakeAccordion: FC<Props> = ({ ...props }) => {
   const { symbol, apr, share } = props;
-  const [, setModalRewardApr] = useModalRewardApr();
+  const [, setModalData] = useModalData();
 
   const handleInfoClick = () => {
     if (!apr) return;
-    setModalRewardApr({ ...apr, symbol });
+    setModalData({
+      rewardApr: { ...apr, symbol },
+      messages: [
+        {
+          title: 'Where do turtles live?',
+          message: 'In the sea',
+        },
+      ],
+    });
   };
 
   return (

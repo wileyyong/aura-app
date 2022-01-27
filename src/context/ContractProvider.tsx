@@ -4,7 +4,7 @@ import { CrvDepositor, CvxLocker, CvxLocker__factory } from '../typechain';
 import { CvxRewardPool } from '../typechain/CvxRewardPool';
 import { CrvDepositor__factory } from '../typechain/factories/CrvDepositor__factory';
 import { CvxRewardPool__factory } from '../typechain/factories/CvxRewardPool__factory';
-import { useChainId, useProvider } from './AppProvider';
+import { useProvider } from './AppProvider';
 
 interface State {
   cvxLocker?: CvxLocker;

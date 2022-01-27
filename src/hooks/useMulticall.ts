@@ -47,6 +47,6 @@ export default function useMulticall(itf: Interface) {
 
       return chunkSize > 1 ? chunk(resp, chunkSize) : resp;
     },
-    [itf, provider, chainId],
+    [provider, chainId, addresses, itf],
   );
 }

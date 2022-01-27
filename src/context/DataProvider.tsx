@@ -14,21 +14,31 @@ import { BigNumber } from 'ethers';
 import { TOKENS } from '../constants';
 import { RewardApr } from '../types';
 
+interface ModalData {
+  rewardApr?: RewardApr;
+  messages?: {
+    title: string;
+    message: string;
+  }[];
+}
+
 interface State {
   initialised: boolean;
   prices?: Record<string, BigNumber>;
-  modal?: {
-    rewardApr?: RewardApr;
-  };
+  modal: ModalData;
 }
 
 interface Dispatch {
-  setModalData: (modal: { rewardApr?: RewardApr }) => void;
+  setModalData: (modal: ModalData) => void;
   setRewardApr: (rewardApr?: RewardApr) => void;
 }
 
 const initialState = {
   initialised: false,
+  modal: {
+    rewardApr: undefined,
+    messages: [],
+  },
 };
 
 const stateCtx = createContext<State>(null as never);
@@ -43,11 +53,16 @@ export const DataProvider: FC = ({ children }) => {
 
   // can expand at a later date
   const setModalData = useCallback(
-    (modal: { rewardApr?: RewardApr }) => {
-      if (!modal?.rewardApr) return;
-      const { rewardApr } = modal;
-      if (rewardApr?.total === state.modal?.rewardApr?.total) return;
-      setState({ ...state, modal: { rewardApr } });
+    (modal: ModalData) => {
+      const { rewardApr, messages } = modal;
+      setState({
+        ...state,
+        modal: {
+          ...state.modal,
+          rewardApr,
+          messages,
+        },
+      });
     },
     [state],
   );
@@ -55,7 +70,13 @@ export const DataProvider: FC = ({ children }) => {
   const setRewardApr = useCallback(
     (rewardApr?: RewardApr) => {
       if (!rewardApr || rewardApr?.total === state.modal?.rewardApr?.total) return;
-      setState({ ...state, modal: { rewardApr } });
+      setState({
+        ...state,
+        modal: {
+          ...state.modal,
+          rewardApr,
+        },
+      });
     },
     [state],
   );

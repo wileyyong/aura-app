@@ -40,12 +40,11 @@ const TableRow: FC<{ title: string; value?: string }> = ({ title, value }) => {
   );
 };
 
-export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
-  const [modalData, setModalData] = useModalData();
-  const rewardApr = modalData?.rewardApr;
+export const ModalReward: FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+  const [{ rewardApr, messages }, setModalData] = useModalData();
 
   const handleOnClose = () => {
-    setModalData({ rewardApr: undefined });
+    setModalData({ rewardApr: undefined, messages: [] });
     onClose();
   };
 
@@ -98,6 +97,11 @@ export const ModalPool: FC<{ open: boolean; onClose: () => void }> = ({ open, on
               </Grid>
             </Grid>
           </Grid>
+          {messages?.map(({ title, message }) => (
+            <Grid item>
+              <AccordionInfo title={title} content={message} />
+            </Grid>
+          ))}
           <Grid item>
             <AccordionInfo
               title="Where do rewards accrue?"

@@ -1,4 +1,4 @@
-import { useAddress, useChainId } from '../context/AppProvider';
+import { useAddress } from '../context/AppProvider';
 import { useContracts } from '../context/ContractProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { parseBN } from '../utils';
