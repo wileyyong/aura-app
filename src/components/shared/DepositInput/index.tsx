@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack, Button } from '@mui/material';
 import { BigNumberish, ContractTransaction, ethers } from 'ethers';
 import { formatEther, parseEther } from 'ethers/lib/utils';
@@ -15,6 +15,7 @@ export interface DepositInputProps {
   buttonLabel: string;
   depositToken: string;
   depositAddress: string;
+  onChange?: (amount: string) => void;
   onDeposit?: (amount: BigNumberish) => Promise<ContractTransaction> | undefined;
 }
 
@@ -28,6 +29,7 @@ export const DepositInput = ({
   buttonLabel,
   depositToken,
   depositAddress,
+  onChange,
 }: DepositInputProps) => {
   const address = useAddress();
   const [loading, setLoading] = useState(false);
@@ -43,11 +45,18 @@ export const DepositInput = ({
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<FormValues>({
     mode: 'onChange',
     reValidateMode: 'onChange',
   });
+
+  const watchAmount = watch('amount') || '0';
+
+  useEffect(() => {
+    onChange && onChange(watchAmount);
+  }, [watchAmount]);
 
   const submit: SubmitHandler<FormValues> = values => {
     const amount = parseEther(values.amount);
@@ -81,7 +90,7 @@ export const DepositInput = ({
   const validate = (value: string) => {
     if (value === '') return 'amount is required';
     if (Number(value) <= 0) return 'amount must be greater than 0';
-    return false;
+    return true;
   };
 
   return (
