@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Stack, Button } from '@mui/material';
 import { BigNumberish, ContractTransaction, ethers } from 'ethers';
