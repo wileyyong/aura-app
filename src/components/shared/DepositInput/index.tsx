@@ -90,7 +90,7 @@ export const DepositInput = ({
   const validate = (value: string) => {
     if (value === '') return 'amount is required';
     if (Number(value) <= 0) return 'amount must be greater than 0';
-    return false;
+    return true;
   };
 
   return (
