@@ -57,7 +57,7 @@ export const AccordionInfo: FC<Props> = ({
           <Typography>{title}</Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ ml: 4.5 }}>
-          <Typography textAlign="left" sx={{ fontSize: '0.875rem' }}>
+          <Typography textAlign={'left'} sx={{ fontSize: '0.875rem' }}>
             {content}
           </Typography>
         </AccordionDetails>

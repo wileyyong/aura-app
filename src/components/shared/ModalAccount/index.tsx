@@ -36,7 +36,7 @@ export const ModalAccount: FC<{ open: boolean; onClose: () => void }> = ({
         {!!address ? (
           <Grid container direction="column" sx={{ py: 2 }}>
             <Grid item>
-              <Typography variant="subtitle1">
+              <Typography variant={'subtitle1'}>
                 Connected with <Address>{mediumAddress(address)}</Address>
               </Typography>
             </Grid>

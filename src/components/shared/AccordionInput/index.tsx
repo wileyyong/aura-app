@@ -119,7 +119,7 @@ export const AccordionInput: FC<AccordionItemProps> = ({
             <Grid item container xs={8}>
               {items.map(item => (
                 <Grid item xs={4} key={item.key}>
-                  {item?.title && <Typography variant="body2">{item?.title}</Typography>}
+                  {item?.title && <Typography variant={'body2'}>{item?.title}</Typography>}
                   <Stack direction="row">
                     <Typography>{item?.value}</Typography>
                     {!!item?.onInfoClick && (

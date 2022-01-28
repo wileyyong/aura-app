@@ -14,7 +14,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
   return (
     <AccordionDetails>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Typography variant="h6">Content</Typography>
+        <Typography variant={'h6'}>Content</Typography>
       </Box>
     </AccordionDetails>
   );
@@ -29,8 +29,8 @@ export const ClaimAccordion: FC<Props> = ({ ...props }) => {
 
   return (
     <AccordionInput
-      highlighted={true}
-      showArrowIcon={true}
+      highlighted
+      showArrowIcon
       symbol={symbol}
       items={[
         {
