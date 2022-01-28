@@ -11,6 +11,8 @@ import { useAddresses } from '../../../hooks/useAddresses';
 import { RewardApr } from '../../../types';
 import { useModalRewardApr } from '../../../context/DataProvider';
 import { useRewardWeightOf } from '../../../hooks/useRewardRateOf';
+import { formatEther } from 'ethers/lib/utils';
+import { format } from '../../../utils/format';
 
 interface Props {
   symbol: string;
@@ -46,7 +48,7 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
 
   // assuming that spend ratio is set to 0 this calculation of the new weight
   // is correct. If spend ratio (in handleLock) in not 0 this needs to change
-  const newRewardWeight = Number(rewardWeight.toString()) + Number(depositAmount);
+  const newRewardWeight = Number(formatEther(rewardWeight)) + Number(depositAmount);
 
   return (
     <AccordionDetails>
@@ -66,9 +68,10 @@ const AccordionInputDetails: FC<Props> = ({ ...props }) => {
             label={`Amount of ${props.symbol} to lock`}
             buttonLabel={`Lock ${props.symbol}`}
           />
-          <Collapse in={newRewardWeight > 0}>
+          <Collapse in={Number(depositAmount) > 0}>
             <Alert severity="info">
-              Your reward weight: {rewardWeight.toString()} → {newRewardWeight.toFixed(2)}
+              Your reward weight: {format(formatEther(rewardWeight.toString()), 2)} →{' '}
+              {format(newRewardWeight.toString(), 2)}
               <br />
               Your lock will expire on May 26 (in 16 weeks + 7 days)
             </Alert>
